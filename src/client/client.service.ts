@@ -13,11 +13,11 @@ export class ClientService {
     ) {
     }
 
-    async createClient(createClientDto: { name: string; email: string }): Promise<Client> {
+    async createClient(createClientDto: { name: string; email: string, phone: string }): Promise<Client> {
         const user = new Client();
         user.name = createClientDto.name;
         user.email = createClientDto.email;
-        //user.phone = createClientDto.phone;
+        user.phone = createClientDto.phone;
 
 
         return this.clientRepository.save(user);

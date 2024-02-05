@@ -9,7 +9,7 @@ export class ClientController {
     constructor(private readonly clientService: ClientService) {}
 
     @Post()
-    async addClient(@Body() createClientDto: { name: string; email: string }): Promise<Client> {
+    async addClient(@Body() createClientDto: { name: string; email: string, phone: string }): Promise<Client> {
         return await this.clientService.createClient(createClientDto);
     }
 
