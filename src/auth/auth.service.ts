@@ -24,7 +24,7 @@ export class AuthService {
             grant_type: 'client_credentials',
         };
 
-        const url = 'https://dev-2r8k0b3r72uke6k5.us.auth0.com/oauth/token';
+        const url = process.env.AUTH0_BASE + 'oauth/token';
 
         return this.httpService
             .post(url, auth0Config)
