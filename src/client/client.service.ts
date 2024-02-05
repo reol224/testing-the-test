@@ -3,6 +3,7 @@ import {Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
 import {Client} from './client.entity';
+import {ClientDto} from "./dto/client.dto";
 
 
 @Injectable()
@@ -13,16 +14,19 @@ export class ClientService {
     ) {
     }
 
-    async createClient(createClientDto: { name: string; email: string, phone: string }): Promise<Client> {
+    async createClient(createClientDto: ClientDto): Promise<Client> {
         const user = new Client();
-        user.name = createClientDto.name;
-        user.email = createClientDto.email;
-        user.phone = createClientDto.phone;
+
+        Object.assign(user, createClientDto);
+
+        user.type = createClientDto.type || 'individual';
+        user.verified = createClientDto.verified || false;
+        user.verified_method = createClientDto.verified_method || 'other';
+        user.status = createClientDto.status || 'missing';
 
 
         return this.clientRepository.save(user);
     }
-
     async getClients(): Promise<Client[]> {
         return await this.clientRepository.find();
     }

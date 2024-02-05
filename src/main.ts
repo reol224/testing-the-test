@@ -1,9 +1,8 @@
 // main.ts
-import {NestFactory} from '@nestjs/core';
-import {AppModule} from './app.module';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
-import {initializeTransactionalContext} from 'typeorm-transactional';
-
+import { initializeTransactionalContext } from 'typeorm-transactional';
 
 dotenv.config();
 
