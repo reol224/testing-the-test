@@ -1,10 +1,10 @@
-import './src/boilerplate.polyfill';
+// import './src/boilerplate.polyfill';
 
-import dotenv from 'dotenv';
+import * as dt from 'dotenv';
 import {DataSource} from 'typeorm';
 import * as process from "process";
 
-dotenv.config();
+dt.config();
 
 export const dataSource = new DataSource({
   type: 'postgres',
@@ -19,5 +19,3 @@ export const dataSource = new DataSource({
   ],
   migrations: ['src/database/migrations/*{.ts,.js}'],
 });
-
-export default dataSource;
