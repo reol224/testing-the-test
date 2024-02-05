@@ -2,15 +2,21 @@
 import {Body, Controller, Delete, Get, Post} from '@nestjs/common';
 import {ClientService} from "./client.service";
 import {Client} from "./client.entity";
+import {ClientDto} from "./dto/client.dto";
 
 
-@Controller('clients')
+@Controller('contact')
 export class ClientController {
     constructor(private readonly clientService: ClientService) {}
 
     @Post()
     async addClient(@Body() createClientDto: { name: string; email: string, phone: string }): Promise<Client> {
-        return await this.clientService.createClient(createClientDto);
+        const clientDto: ClientDto = {
+            name: createClientDto.name,
+            email: createClientDto.email,
+            phone: createClientDto.phone
+        };
+        return await this.clientService.createClient(clientDto);
     }
 
     @Get()
