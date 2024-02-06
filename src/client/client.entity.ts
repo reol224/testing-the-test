@@ -1,6 +1,11 @@
 // client.entity.ts
-import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
-import { Group } from './group.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Client {
@@ -10,11 +15,11 @@ export class Client {
   @Column()
   name: string;
 
-  @Column({ unique: true, default: 'default@example.com' })
+  @Column({ unique: true, nullable: true })
   email: string;
 
   @Column({ type: 'varchar', nullable: true })
-  phone: string | null;
+  phone: string;
 
   @Column({ nullable: true })
   address?: string;
@@ -69,7 +74,7 @@ export class Client {
   })
   type: 'individual' | 'organization' | 'group';
 
-  @Column()
+  @Column({ default: false, nullable: true })
   verified: boolean;
 
   @Column({
@@ -82,7 +87,8 @@ export class Client {
   @Column({
     type: 'enum',
     enum: ['verified', 'rejected', 'manually_verified', 'missing'],
-    default: 'missing' })
+    default: 'missing',
+  })
   status: 'verified' | 'rejected' | 'manually_verified' | 'missing';
 
   @Column({ type: 'json', nullable: true })
@@ -92,9 +98,7 @@ export class Client {
     lg: string;
   };
 
-  //many to many
-  //@OneToMany(() => Group, (group) => group.client)
   @ManyToMany(() => Client)
   @JoinTable()
-  groups: Group[];
+  members: Client[];
 }

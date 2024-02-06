@@ -1,7 +1,4 @@
 // client.client.dto.ts
-
-import { GroupDto } from './group.dto';
-
 export class ClientDto {
   name!: string;
   email!: string;
@@ -34,5 +31,5 @@ export class ClientDto {
     md: string;
     lg: string;
   };
-  groups?: GroupDto[];
+  members?: ClientDto[];
 }

@@ -6,7 +6,6 @@ import { AppService } from './app.service';
 import { ClientModule } from './client/client.module';
 import { ClientController } from './client/client.controller';
 import { AuthModule } from './auth/auth.module';
-import { GroupModule } from './client/group.module';
 
 @Module({
   imports: [
@@ -22,7 +21,6 @@ import { GroupModule } from './client/group.module';
     }),
     ClientModule,
     AuthModule,
-    GroupModule,
   ],
   controllers: [AppController, ClientController],
   providers: [AppService],

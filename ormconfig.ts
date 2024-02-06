@@ -1,5 +1,3 @@
-// import './src/boilerplate.polyfill';
-
 import * as dt from 'dotenv';
 import {DataSource} from 'typeorm';
 import * as process from "process";
