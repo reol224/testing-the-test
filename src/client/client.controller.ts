@@ -14,16 +14,17 @@ export class ClientController {
   }
 
   @Post('/group')
-  //@Exclusion([])
   async addGroup(@Body() createGroupDto: ClientDto): Promise<Client> {
     createGroupDto.type = 'group';
-    return await this.clientService.createGroup(createGroupDto);
+    return await this.clientService.createGroup(createGroupDto, createGroupDto.type);
   }
 
-  // @Post('/org')
-  // async addOrg(@Body() createOrgDto: GroupDto): Promise<Group> {
-  //     return await this.clientService.createOrg(createOrgDto);
-  // }
+  @Post('/org')
+  async addOrg(@Body() createdOrgDto: ClientDto): Promise<Client> {
+    //TODO doesn't auto modify to org
+    createdOrgDto.type = 'organization';
+    return await this.clientService.createGroup(createdOrgDto, createdOrgDto.type);
+  }
 
   @Get()
   async getClients(): Promise<Client[]> {
@@ -35,7 +36,7 @@ export class ClientController {
     return await this.clientService.findOne(email);
   }
 
-  @Delete()
+  @Delete(':id')
   async remove(id: number): Promise<void> {
     await this.clientService.remove(id);
   }

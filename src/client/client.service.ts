@@ -25,13 +25,12 @@ export class ClientService {
     return this.clientRepository.save(user);
   }
 
-  async createGroup(createGroupDto: ClientDto): Promise<Client> {
+  async createGroup(createGroupDto: ClientDto, types: 'group' | 'organization'): Promise<Client> {
     const { members, ...groupData } = createGroupDto;
 
-    // Create a new Client entity with the 'group' type
     const group = this.clientRepository.create({
       name: groupData.name,
-      type: 'group',
+      type: types,
       email: groupData.email,
       phone: groupData.phone,
       address: groupData.address,
@@ -54,7 +53,7 @@ export class ClientService {
       members: [],
     });
 
-    // Create and associate members with the group
+
     if (members && members.length > 0) {
       for (const memberDto of members) {
         const member = this.clientRepository.create({
@@ -79,17 +78,14 @@ export class ClientService {
           verified_method: memberDto.verified_method || 'other',
           status: memberDto.status || 'missing',
           avatar: memberDto.avatar,
-
-          // Set other properties accordingly
         });
 
-        // Save the member and push it to the group's members array
         const savedMember = await this.clientRepository.save(member);
         group.members.push(savedMember);
       }
     }
 
-    // Save the group with its associated members
+
     return await this.clientRepository.save(group);
   }
 
