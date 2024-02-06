@@ -8,9 +8,32 @@ import { ClientDto } from './dto/client.dto';
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
 
+  @Get()
+  async getClients(): Promise<Client[]> {
+    return await this.clientService.getClients();
+  }
   @Post()
   async addClient(@Body() createClientDto: ClientDto): Promise<Client> {
     return await this.clientService.createClient(createClientDto);
+  }
+
+  @Patch(':id')
+  async updateClient(
+      @Param('id') id: number,
+      @Body() updateClientDto: ClientDto,
+  ): Promise<Client> {
+    return await this.clientService.updateClient(id, updateClientDto);
+  }
+
+  @Delete(':id')
+  async remove(id: number): Promise<void> {
+    const clientToRemove = await this.clientService.findOneById(id);
+
+    if (!clientToRemove) {
+      throw new NotFoundException(`Client with ID ${id} not found`);
+    }
+
+    await this.clientService.remove(clientToRemove.id);
   }
 
   @Post('/group')
@@ -26,10 +49,6 @@ export class ClientController {
     return await this.clientService.createGroup(createdOrgDto, createdOrgDto.type);
   }
 
-  @Get()
-  async getClients(): Promise<Client[]> {
-    return await this.clientService.getClients();
-  }
 
   @Get(':email')
   async findOneByEmail(@Param('email') email: string): Promise<Client | null> {
@@ -51,23 +70,8 @@ export class ClientController {
     }
   }
 
-  @Delete(':id')
-  async remove(id: number): Promise<void> {
-    const clientToRemove = await this.clientService.findOneById(id);
 
-    if (!clientToRemove) {
-      throw new NotFoundException(`Client with ID ${id} not found`);
-    }
 
-    await this.clientService.remove(clientToRemove.id);
-  }
 
-  @Patch(':id')
-  async updateClient(
-    @Param('id') id: number,
-    @Body() updateClientDto: ClientDto,
-  ): Promise<Client> {
-    return await this.clientService.updateClient(id, updateClientDto);
-  }
 
 }
