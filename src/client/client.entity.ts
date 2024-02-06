@@ -1,11 +1,15 @@
 // client.entity.ts
 import {
   Column,
-  Entity,
+  Entity, JoinColumn,
   JoinTable,
-  ManyToMany,
+  ManyToMany, ManyToOne, OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import {RequirementEntity} from "../requirement/requirement.entity";
+import {Contract} from "../contract/contract.entity";
+import {Fintrac} from "../fintrac/fintrac.entity";
+import {ClientVerificationHistory} from "./client_verification_history/client_verification_history.entity";
 
 @Entity()
 export class Client {
@@ -38,12 +42,12 @@ export class Client {
 
   @Column({ nullable: true })
   employment_type?:
-    | 'employed'
-    | 'self-employed'
-    | 'part time'
-    | 'contract'
-    | 'retired'
-    | 'other';
+      | 'employed'
+      | 'self-employed'
+      | 'part time'
+      | 'contract'
+      | 'retired'
+      | 'other';
 
   @Column({ nullable: true })
   employer_name?: string;
@@ -91,14 +95,63 @@ export class Client {
   })
   status: 'verified' | 'rejected' | 'manually_verified' | 'missing';
 
-  @Column({ type: 'json', nullable: true })
-  avatar?: {
-    sm: string;
-    md: string;
-    lg: string;
-  };
+  @Column({
+    type: 'enum',
+    enum: ['spouse', 'cosigner'],
+    nullable: true,
+  })
+  partner_relationship?: 'spouse' | 'cosigner';
+
+  @Column({
+    type: 'enum',
+    enum: [
+      'fulltime',
+      'selfemployed',
+      'parttime',
+      'contract',
+      'retired',
+      'other',
+    ],
+    nullable: true,
+  })
+  employment_status?:
+      | 'fulltime'
+      | 'selfemployed'
+      | 'parttime'
+      | 'contract'
+      | 'retired'
+      | 'other';
+
+  @Column({ type: 'boolean', nullable: true })
+  visible: boolean;
+
+  @Column({ type: 'number', nullable: true })
+  completed_percent: number;
+
+  @Column({ nullable: true })
+  avatar_image_id: string;
+
+  @ManyToOne(() => Client, { nullable: true })
+  @JoinColumn({ name: 'contact_identity_id' })
+  contact_identity: Client;
+
+  @ManyToOne(() => Client, { nullable: true })
+  @JoinColumn({ name: 'verification_id' })
+  verification: Client;
+
+  @OneToMany(() => RequirementEntity, (requirement) => requirement.client)
+  requirements: RequirementEntity[];
+
+  @OneToMany(() => Contract, (contract) => contract.client)
+  contracts: Contract[];
+
+  @OneToMany(() => Fintrac, (fintrac) => fintrac.client)
+  fintracs: Fintrac[];
 
   @ManyToMany(() => Client)
   @JoinTable()
   members: Client[];
+
+  @OneToMany(() => ClientVerificationHistory, (history) => history.client)
+  verification_history: ClientVerificationHistory[];
 }
