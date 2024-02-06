@@ -1,5 +1,5 @@
 // client.controller.ts
-import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
+import {Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post} from '@nestjs/common';
 import { ClientService } from './client.service';
 import { Client } from './client.entity';
 import { ClientDto } from './dto/client.dto';
@@ -32,12 +32,42 @@ export class ClientController {
   }
 
   @Get(':email')
-  async findOne(email: string): Promise<Client | null> {
-    return await this.clientService.findOne(email);
+  async findOneByEmail(@Param('email') email: string): Promise<Client | null> {
+    try {
+      return await this.clientService.findOneByEmail(email);
+    } catch (error) {
+      console.error(error);
+      throw new NotFoundException(`Client with email ${email} not found`);
+    }
+  }
+
+  @Get(':id')
+  async findOneById(@Param('id') id: number): Promise<Client | null> {
+    try {
+      return await this.clientService.findOneById(id);
+    } catch (error) {
+      console.error(error);
+      throw new NotFoundException(`Client with ID ${id} not found`);
+    }
   }
 
   @Delete(':id')
   async remove(id: number): Promise<void> {
-    await this.clientService.remove(id);
+    const clientToRemove = await this.clientService.findOneById(id);
+
+    if (!clientToRemove) {
+      throw new NotFoundException(`Client with ID ${id} not found`);
+    }
+
+    await this.clientService.remove(clientToRemove.id);
   }
+
+  @Patch(':id')
+  async updateClient(
+    @Param('id') id: number,
+    @Body() updateClientDto: ClientDto,
+  ): Promise<Client> {
+    return await this.clientService.updateClient(id, updateClientDto);
+  }
+
 }

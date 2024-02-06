@@ -1,5 +1,5 @@
 // client.service.ts
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Client } from './client.entity';
@@ -93,11 +93,36 @@ export class ClientService {
     return await this.clientRepository.find();
   }
 
-  async findOne(email: string): Promise<Client | null> {
-    return await this.clientRepository.findOneBy({ email });
+  async findOneByEmail(email: string): Promise<Client | null> {
+    //TODO RETURNS EVERYTHING
+    return await this.clientRepository.findOneBy({email: email});
+  }
+
+  async findOneById(id: number): Promise<Client | null> {
+    //TODO RETURNS EMPTY
+    try {
+      return await this.clientRepository.findOneBy({ id: id });
+    } catch (error) {
+      return null;
+    }
   }
 
   async remove(id: number): Promise<void> {
     await this.clientRepository.delete(id);
+  }
+
+  async updateClient(id: number, updateClientDto: ClientDto): Promise<Client> {
+    const existingClient = await this.clientRepository.findOneBy({ id: id});
+
+    if (!existingClient) {
+      throw new NotFoundException(`Client with ID ${id} not found`);
+    }
+
+    const updatedClient = this.clientRepository.merge(
+        existingClient,
+        updateClientDto,
+    );
+
+    return this.clientRepository.save(updatedClient);
   }
 }
