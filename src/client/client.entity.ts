@@ -122,36 +122,43 @@ export class Client {
       | 'retired'
       | 'other';
 
-  @Column({ type: 'boolean', nullable: true })
+  @Column({nullable: true })
   visible: boolean;
 
-  @Column({ type: 'number', nullable: true })
+  @Column({nullable: true })
   completed_percent: number;
 
   @Column({ nullable: true })
   avatar_image_id: string;
 
+  @Column({ type: 'json', nullable: true })
+  avatar?: {
+    sm: string;
+    md: string;
+    lg: string;
+  };
+
   @ManyToOne(() => Client, { nullable: true })
-  @JoinColumn({ name: 'contact_identity_id' })
-  contact_identity: Client;
+  @JoinColumn({ name: 'client_identity_id' })
+  client_identity?: Client;
 
   @ManyToOne(() => Client, { nullable: true })
   @JoinColumn({ name: 'verification_id' })
-  verification: Client;
+  verification?: Client;
 
-  @OneToMany(() => RequirementEntity, (requirement) => requirement.client)
-  requirements: RequirementEntity[];
+  @OneToMany(() => RequirementEntity, (requirement) => requirement.client, {nullable: true})
+  requirements?: RequirementEntity[];
 
-  @OneToMany(() => Contract, (contract) => contract.client)
-  contracts: Contract[];
+  @OneToMany(() => Contract, (contract) => contract.client, {nullable: true})
+  contracts?: Contract[];
 
-  @OneToMany(() => Fintrac, (fintrac) => fintrac.client)
-  fintracs: Fintrac[];
+  @OneToMany(() => Fintrac, (fintrac) => fintrac.client, {nullable: true})
+  fintracs?: Fintrac[];
 
   @ManyToMany(() => Client)
   @JoinTable()
   members: Client[];
 
-  @OneToMany(() => ClientVerificationHistory, (history) => history.client)
-  verification_history: ClientVerificationHistory[];
+  @OneToMany(() => ClientVerificationHistory, (history) => history.client, {nullable: true})
+  verification_history?: ClientVerificationHistory[];
 }

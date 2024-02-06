@@ -15,9 +15,9 @@ export class Fintrac {
 
     @Column({
         type: 'enum',
-        enum: ['individual', 'corporation'],
+        enum: ['individual', 'organization'],
     })
-    type: 'individual' | 'corporation';
+    type: 'individual' | 'organization';
 
     @Column({ nullable: true })
     property_address: string;

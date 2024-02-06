@@ -1,4 +1,5 @@
 import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import { Client } from '../client.entity';
 
 @Entity()
 export class ClientIdentity {

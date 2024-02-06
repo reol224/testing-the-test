@@ -69,9 +69,4 @@ export class ClientController {
       throw new NotFoundException(`Client with ID ${id} not found`);
     }
   }
-
-
-
-
-
 }
