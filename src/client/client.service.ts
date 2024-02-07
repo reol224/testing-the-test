@@ -4,12 +4,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, Repository } from 'typeorm';
 import { Client } from './client.entity';
 import { ClientDto } from './dto/client.dto';
+import { ClientIdentity } from './client_identity/client_identity.entity';
 
 @Injectable()
 export class ClientService {
   constructor(
     @InjectRepository(Client)
     private readonly clientRepository: Repository<Client>,
+
+    @InjectRepository(ClientIdentity)
+    private readonly clientIdentityRepository: Repository<ClientIdentity>
   ) {}
 
   async createClient(createClientDto: ClientDto): Promise<Client> {
@@ -54,14 +58,14 @@ export class ClientService {
       visible: groupData.visible,
       completed_percent: groupData.completed_percent,
       avatar_image_id: groupData.avatar_image_id,
-      // client_identity: client_identity ? this.clientRepository.create(client_identity) : undefined,
-      //
+      client_identity: client_identity ? this.clientIdentityRepository.create(client_identity) : undefined,
+
       // verification: verification ? this.clientRepository.create(verification) : undefined,
       // requirements: requirements ? requirements.map(req => this.clientRepository.create(req)) : [],
       // contracts: contracts ? contracts.map(contract => this.clientRepository.create(contract)) : [],
       // fintracs: fintracs ? fintracs.map(fintrac => this.clientRepository.create(fintrac)) : [],
-      members: [],
-      //verification_history: verification_history ? verification_history.map(history => this.clientRepository.create(history)) : [],
+      // members: [],
+      // verification_history: verification_history ? verification_history.map(history => this.clientRepository.create(history)) : [],
     });
 
     if (members && members.length > 0) {

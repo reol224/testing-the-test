@@ -8,10 +8,7 @@ import { ClientDto } from './dto/client.dto';
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
 
-  @Get()
-  async getClients(): Promise<Client[]> {
-    return await this.clientService.getClients();
-  }
+
   @Post()
   async addClient(@Body() createClientDto: ClientDto): Promise<Client> {
     return await this.clientService.createClient(createClientDto);
@@ -50,7 +47,7 @@ export class ClientController {
   }
 
 
-  @Get(':email')
+  @Get('email/:email')
   async findOneByEmail(@Param('email') email: string): Promise<Client | null> {
     try {
       return await this.clientService.findOneByEmail(email);
@@ -68,5 +65,10 @@ export class ClientController {
       console.error(error);
       throw new NotFoundException(`Client with ID ${id} not found`);
     }
+  }
+
+  @Get()
+  async getClients(): Promise<Client[]> {
+    return await this.clientService.getClients();
   }
 }

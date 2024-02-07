@@ -18,9 +18,10 @@ export class ClientIdentity {
 
     @Column({
         type: 'enum',
-        enum: ['verified', 'manual', 'missing'],
+        enum: ['verified', 'rejected', 'manually_verified', 'missing'],
+        default: 'missing',
     })
-    status: 'verified' | 'manual' | 'missing';
+    status: 'verified' | 'rejected' | 'manually_verified' | 'missing';
 
     @Column({ nullable: true })
     other_method: string;
