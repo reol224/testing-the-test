@@ -1,15 +1,18 @@
 // client.entity.ts
 import {
   Column,
-  Entity, JoinColumn,
+  Entity,
+  JoinColumn,
   JoinTable,
-  ManyToMany, ManyToOne, OneToMany,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import {RequirementEntity} from "../requirement/requirement.entity";
-import {Contract} from "../contract/contract.entity";
-import {Fintrac} from "../fintrac/fintrac.entity";
-import {ClientVerificationHistory} from "./client_verification_history/client_verification_history.entity";
+import { RequirementEntity } from '../requirement/requirement.entity';
+import { Contract } from '../contract/contract.entity';
+import { Fintrac } from '../fintrac/fintrac.entity';
+import { ClientVerificationHistory } from './client_verification_history/client_verification_history.entity';
 
 @Entity()
 export class Client {
@@ -42,12 +45,12 @@ export class Client {
 
   @Column({ nullable: true })
   employment_type?:
-      | 'employed'
-      | 'self-employed'
-      | 'part time'
-      | 'contract'
-      | 'retired'
-      | 'other';
+    | 'employed'
+    | 'self-employed'
+    | 'part time'
+    | 'contract'
+    | 'retired'
+    | 'other';
 
   @Column({ nullable: true })
   employer_name?: string;
@@ -115,17 +118,17 @@ export class Client {
     nullable: true,
   })
   employment_status?:
-      | 'fulltime'
-      | 'selfemployed'
-      | 'parttime'
-      | 'contract'
-      | 'retired'
-      | 'other';
+    | 'fulltime'
+    | 'selfemployed'
+    | 'parttime'
+    | 'contract'
+    | 'retired'
+    | 'other';
 
-  @Column({nullable: true })
+  @Column({ nullable: true })
   visible: boolean;
 
-  @Column({nullable: true })
+  @Column({ nullable: true })
   completed_percent: number;
 
   @Column({ nullable: true })
@@ -146,19 +149,23 @@ export class Client {
   @JoinColumn({ name: 'verification_id' })
   verification?: Client;
 
-  @OneToMany(() => RequirementEntity, (requirement) => requirement.client, {nullable: true})
+  @OneToMany(() => RequirementEntity, (requirement) => requirement.client, {
+    nullable: true,
+  })
   requirements?: RequirementEntity[];
 
-  @OneToMany(() => Contract, (contract) => contract.client, {nullable: true})
+  @OneToMany(() => Contract, (contract) => contract.client, { nullable: true })
   contracts?: Contract[];
 
-  @OneToMany(() => Fintrac, (fintrac) => fintrac.client, {nullable: true})
+  @OneToMany(() => Fintrac, (fintrac) => fintrac.client, { nullable: true })
   fintracs?: Fintrac[];
 
   @ManyToMany(() => Client)
   @JoinTable()
   members: Client[];
 
-  @OneToMany(() => ClientVerificationHistory, (history) => history.client, {nullable: true})
+  @OneToMany(() => ClientVerificationHistory, (history) => history.client, {
+    nullable: true,
+  })
   verification_history?: ClientVerificationHistory[];
 }

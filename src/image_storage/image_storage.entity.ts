@@ -1,22 +1,22 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class ImageStorage {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    endpoint: string;
+  @Column()
+  endpoint: string;
 
-    @Column()
-    path: string;
+  @Column()
+  path: string;
 
-    @Column({
-        type: 'enum',
-        enum: ['sm', 'md', 'lr'],
-    })
-    resolution: 'sm' | 'md' | 'lr';
+  @Column({
+    type: 'enum',
+    enum: ['sm', 'md', 'lr'],
+  })
+  resolution: 'sm' | 'md' | 'lr';
 
-    @Column()
-    url: string;
+  @Column()
+  url: string;
 }

@@ -1,28 +1,28 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Document {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    key: string;
+  @Column()
+  key: string;
 
-    @Column()
-    endpoint: string;
+  @Column()
+  endpoint: string;
 
-    @Column()
-    path: string;
+  @Column()
+  path: string;
 
-    @Column()
-    mime_type: string;
+  @Column()
+  mime_type: string;
 
-    @Column()
-    size: string;
+  @Column()
+  size: string;
 
-    @Column()
-    original_filename: string;
+  @Column()
+  original_filename: string;
 
-    @Column()
-    signed: boolean;
+  @Column()
+  signed: boolean;
 }

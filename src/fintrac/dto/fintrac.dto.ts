@@ -4,7 +4,7 @@ export class FintracDto {
   id: number;
   client: ClientDto;
   client_requirement_id: number;
-  type: 'individual' | 'corporation';
+  type: 'individual' | 'organization' | 'group';
   property_address?: string;
   corporation_legal_name?: string;
   director_names?: string;

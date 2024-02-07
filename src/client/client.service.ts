@@ -1,10 +1,19 @@
 // client.service.ts
-import {Injectable, NotFoundException} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Client } from './client.entity';
 import { ClientDto } from './dto/client.dto';
 import { ClientIdentity } from './client_identity/client_identity.entity';
+import { RequirementEntity } from '../requirement/requirement.entity';
+import { Contract } from '../contract/contract.entity';
+import { ClientIdentityDto } from './client_identity/dto/client_identity.dto';
+import { RequirementDto } from '../requirement/dto/requirement.dto';
+import { ContractDto } from '../contract/dto/contract.dto';
+import { FintracDto } from '../fintrac/dto/fintrac.dto';
+import { Fintrac } from '../fintrac/fintrac.entity';
+import { ClientVerificationHistory } from './client_verification_history/client_verification_history.entity';
+import { ClientVerificationHistoryDto } from './client_verification_history/dto/client_verification_history.dto';
 
 @Injectable()
 export class ClientService {
@@ -13,7 +22,19 @@ export class ClientService {
     private readonly clientRepository: Repository<Client>,
 
     @InjectRepository(ClientIdentity)
-    private readonly clientIdentityRepository: Repository<ClientIdentity>
+    private readonly clientIdentityRepository: Repository<ClientIdentityDto>,
+
+    @InjectRepository(RequirementEntity)
+    private readonly requirementRepository: Repository<RequirementDto>,
+
+    @InjectRepository(Contract)
+    private readonly contractRepository: Repository<ContractDto>,
+
+    @InjectRepository(ClientVerificationHistory)
+    private readonly clientVerificationHistoryRepository: Repository<ClientVerificationHistoryDto>,
+
+    @InjectRepository(Fintrac)
+    private readonly fintracRepository: Repository<FintracDto>,
   ) {}
 
   async createClient(createClientDto: ClientDto): Promise<Client> {
@@ -29,8 +50,20 @@ export class ClientService {
     return this.clientRepository.save(user);
   }
 
-  async createGroup(createGroupDto: ClientDto, types: 'group' | 'organization'): Promise<Client> {
-    const { members, verification_history, requirements, contracts, fintracs, client_identity, verification, ...groupData } = createGroupDto;
+  async createGroup(
+    createGroupDto: ClientDto,
+    types: 'group' | 'organization',
+  ): Promise<Client> {
+    const {
+      members,
+      verification_history,
+      requirements,
+      contracts,
+      fintracs,
+      client_identity,
+      verification,
+      ...groupData
+    } = createGroupDto;
 
     const group = this.clientRepository.create({
       name: groupData.name,
@@ -58,19 +91,32 @@ export class ClientService {
       visible: groupData.visible,
       completed_percent: groupData.completed_percent,
       avatar_image_id: groupData.avatar_image_id,
-      client_identity: client_identity ? this.clientIdentityRepository.create(client_identity) : undefined,
-
-      // verification: verification ? this.clientRepository.create(verification) : undefined,
-      // requirements: requirements ? requirements.map(req => this.clientRepository.create(req)) : [],
-      // contracts: contracts ? contracts.map(contract => this.clientRepository.create(contract)) : [],
-      // fintracs: fintracs ? fintracs.map(fintrac => this.clientRepository.create(fintrac)) : [],
-      // members: [],
-      // verification_history: verification_history ? verification_history.map(history => this.clientRepository.create(history)) : [],
+      client_identity: client_identity
+        ? this.clientIdentityRepository.create(client_identity)
+        : undefined,
+      verification: verification
+        ? this.clientIdentityRepository.create(verification)
+        : undefined,
+      requirements: requirements
+        ? requirements.map((req) => this.requirementRepository.create(req))
+        : [],
+      contracts: contracts
+        ? contracts.map((contract) => this.contractRepository.create(contract))
+        : [],
+      fintracs: fintracs
+        ? fintracs.map((fintrac) => this.fintracRepository.create(fintrac))
+        : [],
+      members: [],
+      verification_history: verification_history
+        ? verification_history.map((history) =>
+            this.clientVerificationHistoryRepository.create(history),
+          )
+        : [],
     });
 
     if (members && members.length > 0) {
       for (const memberDto of members) {
-        const member = this.clientRepository.create(memberDto as DeepPartial<Client>);
+        const member = this.clientRepository.create(memberDto);
         const savedMember = await this.clientRepository.save(member);
         group.members.push(savedMember);
       }
@@ -142,14 +188,13 @@ export class ClientService {
   //
   //   return await this.clientRepository.save(group);
   // }
-
   async getClients(): Promise<Client[]> {
     return await this.clientRepository.find();
   }
 
   async findOneByEmail(email: string): Promise<Client | null> {
     //TODO RETURNS EVERYTHING
-    return await this.clientRepository.findOneBy({email: email});
+    return await this.clientRepository.findOneBy({ email: email });
   }
 
   async findOneById(id: number): Promise<Client | null> {
@@ -166,15 +211,15 @@ export class ClientService {
   }
 
   async updateClient(id: number, updateClientDto: ClientDto): Promise<Client> {
-    const existingClient = await this.clientRepository.findOneBy({ id: id});
+    const existingClient = await this.clientRepository.findOneBy({ id: id });
 
     if (!existingClient) {
       throw new NotFoundException(`Client with ID ${id} not found`);
     }
 
     const updatedClient = this.clientRepository.merge(
-        existingClient,
-        updateClientDto as Client //TODO CHECK DEEP PARTIAL TOO,
+      existingClient,
+      updateClientDto as Client, //TODO CHECK DEEP PARTIAL TOO,
     );
 
     return this.clientRepository.save(updatedClient);
