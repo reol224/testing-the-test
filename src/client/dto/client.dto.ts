@@ -2,6 +2,7 @@ import { RequirementDto } from '../../requirement/dto/requirement.dto';
 import { ContractDto } from '../../contract/dto/contract.dto';
 import { FintracDto } from '../../fintrac/dto/fintrac.dto';
 import { ClientVerificationHistoryDto } from '../client_verification_history/dto/client_verification_history.dto';
+import { ClientIdentityDto } from '../client_identity/dto/client_identity.dto';
 
 export class ClientDto {
   name!: string;
@@ -46,7 +47,7 @@ export class ClientDto {
     md: string;
     lg: string;
   };
-  client_identity?: ClientDto;
+  client_identity?: ClientIdentityDto;
   verification?: ClientDto;
   requirements?: RequirementDto[];
   contracts?: ContractDto[];

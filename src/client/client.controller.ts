@@ -1,5 +1,15 @@
 // client.controller.ts
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotAcceptableException,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ClientService } from './client.service';
 import { Client } from './client.entity';
 import { ClientDto } from './dto/client.dto';
@@ -10,7 +20,12 @@ export class ClientController {
 
   @Post()
   async addClient(@Body() createClientDto: ClientDto): Promise<Client> {
-    return await this.clientService.createClient(createClientDto);
+    try {
+      return await this.clientService.createClient(createClientDto);
+    } catch (error) {
+      console.log(error);
+      throw new NotAcceptableException("Client couldn't be created");
+    }
   }
 
   @Patch(':id')

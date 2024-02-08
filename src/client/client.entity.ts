@@ -13,6 +13,10 @@ import { RequirementEntity } from '../requirement/requirement.entity';
 import { Contract } from '../contract/contract.entity';
 import { Fintrac } from '../fintrac/fintrac.entity';
 import { ClientVerificationHistory } from './client_verification_history/client_verification_history.entity';
+import { FintracDto } from '../fintrac/dto/fintrac.dto';
+import { RequirementDto } from '../requirement/dto/requirement.dto';
+import { ContractDto } from '../contract/dto/contract.dto';
+import { ClientVerificationHistoryDto } from './client_verification_history/dto/client_verification_history.dto';
 
 @Entity()
 export class Client {
@@ -152,13 +156,13 @@ export class Client {
   @OneToMany(() => RequirementEntity, (requirement) => requirement.client, {
     nullable: true,
   })
-  requirements?: RequirementEntity[];
+  requirements?: RequirementDto[];
 
   @OneToMany(() => Contract, (contract) => contract.client, { nullable: true })
-  contracts?: Contract[];
+  contracts?: ContractDto[];
 
   @OneToMany(() => Fintrac, (fintrac) => fintrac.client, { nullable: true })
-  fintracs?: Fintrac[];
+  fintracs?: FintracDto[];
 
   @ManyToMany(() => Client)
   @JoinTable()
@@ -167,5 +171,5 @@ export class Client {
   @OneToMany(() => ClientVerificationHistory, (history) => history.client, {
     nullable: true,
   })
-  verification_history?: ClientVerificationHistory[];
+  verification_history?: ClientVerificationHistoryDto[];
 }

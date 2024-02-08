@@ -17,7 +17,7 @@ import { ClientVerificationHistoryDto } from './client_verification_history/dto/
 
 @Injectable()
 export class ClientService {
-  constructor(
+    constructor(
     @InjectRepository(Client)
     private readonly clientRepository: Repository<Client>,
 
@@ -38,16 +38,69 @@ export class ClientService {
   ) {}
 
   async createClient(createClientDto: ClientDto): Promise<Client> {
-    const user = new Client();
+    // const user = new Client();
+    //
+    // Object.assign(user, createClientDto);
+    //
+    // user.type = createClientDto.type || 'individual';
+    // user.verified = createClientDto.verified || false;
+    // user.verified_method = createClientDto.verified_method || 'other';
+    // user.status = createClientDto.status || 'missing';
+    // user.requirements = createClientDto.requirements ?? [];
+    // user.contracts = createClientDto.contracts ?? [];
+    // user.fintracs = createClientDto.fintracs ?? [];
+    // user.verification_history = createClientDto.verification_history ?? [];
+    //
+    // return this.clientRepository.save(user);
 
-    Object.assign(user, createClientDto);
+    const {
+      type,
+      verified,
+      verified_method,
+      status,
+      requirements,
+      contracts,
+      fintracs,
+      verification_history,
+      ...data
+    } = createClientDto;
 
-    user.type = createClientDto.type || 'individual';
-    user.verified = createClientDto.verified || false;
-    user.verified_method = createClientDto.verified_method || 'other';
-    user.status = createClientDto.status || 'missing';
+    const client = this.clientRepository.create({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      address: data.address,
+      city: data.city,
+      province: data.province,
+      postal_code: data.postal_code,
+      country: data.country,
+      employment_type: data.employment_type,
+      employer_name: data.employer_name,
+      industry: data.industry,
+      position: data.position,
+      corporation_number: data.corporation_number,
+      operating_as: data.operating_as,
+      corp_jurisdiction: data.corp_jurisdiction,
+      principal_business: data.principal_business,
+      type: type || 'individual',
+      verified: verified || false,
+      verified_method: verified_method || 'other',
+      status: status || 'missing',
+      partner_relationship: data.partner_relationship,
+      employment_status: data.employment_status,
+      visible: data.visible,
+      completed_percent: data.completed_percent,
+      avatar_image_id: data.avatar_image_id,
+      avatar: data.avatar,
+      client_identity: data.client_identity, // TODO: buggy
+      verification: data.verification, // TODO: buggy
+      requirements: requirements,
+      contracts: contracts,
+      fintracs: fintracs,
+      verification_history: verification_history,
+    });
 
-    return this.clientRepository.save(user);
+    return this.clientRepository.save(client);
   }
 
   async createGroup(
