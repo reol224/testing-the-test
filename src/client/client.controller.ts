@@ -36,31 +36,16 @@ export class ClientController {
   async addGroup(@Body() createGroupDto: ClientDto): Promise<Client> {
     createGroupDto.type = 'group';
     return await this.clientService.createGroup(
-      createGroupDto,
-      createGroupDto.type,
+      createGroupDto
     );
   }
 
   @Post('/org')
-  async addOrg(@Body() createdOrgDto: ClientDto): Promise<Client> {
-    //TODO doesn't auto modify to org
-    createdOrgDto.type = 'organization';
-    return await this.clientService.createGroup(
-      createdOrgDto,
-      createdOrgDto.type,
+  async addOrg(@Body() createOrgDto: ClientDto): Promise<Client> {
+    return await this.clientService.createOrg(
+      createOrgDto
     );
   }
-
-  @Get('email/:email')
-  async findOneByEmail(@Param('email') email: string): Promise<Client | null> {
-    try {
-      return await this.clientService.findOneByEmail(email);
-    } catch (error) {
-      console.error(error);
-      throw new NotFoundException(`Client with email ${email} not found`);
-    }
-  }
-
   @Get(':id')
   async findOneById(@Param('id') id: number): Promise<Client | null> {
     try {

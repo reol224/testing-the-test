@@ -51,8 +51,7 @@ export class ClientService {
   }
 
   async createGroup(
-    createGroupDto: ClientDto,
-    types: 'group' | 'organization',
+    createGroupDto: ClientDto
   ): Promise<Client> {
     const {
       members,
@@ -67,7 +66,7 @@ export class ClientService {
 
     const group = this.clientRepository.create({
       name: groupData.name,
-      type: types,
+      type: groupData.type,
       email: groupData.email,
       phone: groupData.phone,
       address: groupData.address,
@@ -123,6 +122,12 @@ export class ClientService {
     }
 
     return await this.clientRepository.save(group);
+  }
+
+  async createOrg(createOrgDto: ClientDto): Promise<Client> {
+    const orgDto: ClientDto = { ...createOrgDto, type: 'organization' };
+
+    return await this.createGroup(orgDto);
   }
 
   // async createGroup(createGroupDto: ClientDto, types: 'group' | 'organization'): Promise<Client> {
@@ -190,11 +195,6 @@ export class ClientService {
   // }
   async getClients(): Promise<Client[]> {
     return await this.clientRepository.find();
-  }
-
-  async findOneByEmail(email: string): Promise<Client | null> {
-    //TODO RETURNS EVERYTHING
-    return await this.clientRepository.findOneBy({ email: email });
   }
 
   async findOneById(id: number): Promise<Client | null> {
