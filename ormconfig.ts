@@ -1,6 +1,6 @@
 import * as dt from 'dotenv';
-import {DataSource} from 'typeorm';
-import * as process from "process";
+import { DataSource } from 'typeorm';
+import * as process from 'process';
 
 dt.config();
 
@@ -15,5 +15,5 @@ export const dataSource = new DataSource({
     'src/**/*.entity{.ts,.js}',
     'src/**/*.view-entity{.ts,.js}',
   ],
-  migrations: ['src/database/migrations/*{.ts,.js}'],
+  migrations: ['src/database/*{.ts,.js}'],
 });

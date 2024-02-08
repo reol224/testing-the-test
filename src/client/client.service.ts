@@ -38,21 +38,6 @@ export class ClientService {
   ) {}
 
   async createClient(createClientDto: ClientDto): Promise<Client> {
-    // const user = new Client();
-    //
-    // Object.assign(user, createClientDto);
-    //
-    // user.type = createClientDto.type || 'individual';
-    // user.verified = createClientDto.verified || false;
-    // user.verified_method = createClientDto.verified_method || 'other';
-    // user.status = createClientDto.status || 'missing';
-    // user.requirements = createClientDto.requirements ?? [];
-    // user.contracts = createClientDto.contracts ?? [];
-    // user.fintracs = createClientDto.fintracs ?? [];
-    // user.verification_history = createClientDto.verification_history ?? [];
-    //
-    // return this.clientRepository.save(user);
-
     const {
       type,
       verified,
@@ -92,12 +77,15 @@ export class ClientService {
       completed_percent: data.completed_percent,
       avatar_image_id: data.avatar_image_id,
       avatar: data.avatar,
-      client_identity: data.client_identity, // TODO: buggy
-      verification: data.verification, // TODO: buggy
-      requirements: requirements,
-      contracts: contracts,
-      fintracs: fintracs,
-      verification_history: verification_history,
+
+      client_identity: data.client_identity ? this.clientIdentityRepository.create(data.client_identity) : undefined,
+
+      //verification: data.verification ? this.clientRepository.create(data.verification) : undefined,
+
+      requirements: requirements ?? [],
+      contracts: contracts ?? [],
+      fintracs: fintracs ?? [],
+      verification_history: verification_history ?? [],
     });
 
     return this.clientRepository.save(client);

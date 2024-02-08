@@ -17,6 +17,7 @@ import { FintracDto } from '../fintrac/dto/fintrac.dto';
 import { RequirementDto } from '../requirement/dto/requirement.dto';
 import { ContractDto } from '../contract/dto/contract.dto';
 import { ClientVerificationHistoryDto } from './client_verification_history/dto/client_verification_history.dto';
+import { ClientIdentity } from './client_identity/client_identity.entity';
 
 @Entity()
 export class Client {
@@ -145,11 +146,11 @@ export class Client {
     lg: string;
   };
 
-  @ManyToOne(() => Client, { nullable: true })
+  @ManyToOne(() => ClientIdentity,  { nullable: true, cascade: true })
   @JoinColumn({ name: 'client_identity_id' })
-  client_identity?: Client;
+  client_identity?: ClientIdentity;
 
-  @ManyToOne(() => Client, { nullable: true })
+  @ManyToOne(() => Client, { nullable: true, cascade: true })
   @JoinColumn({ name: 'verification_id' })
   verification?: Client;
 
@@ -159,10 +160,10 @@ export class Client {
   requirements?: RequirementDto[];
 
   @OneToMany(() => Contract, (contract) => contract.client, { nullable: true })
-  contracts?: ContractDto[];
+  contracts?: Contract[];
 
   @OneToMany(() => Fintrac, (fintrac) => fintrac.client, { nullable: true })
-  fintracs?: FintracDto[];
+  fintracs?: Fintrac[];
 
   @ManyToMany(() => Client)
   @JoinTable()

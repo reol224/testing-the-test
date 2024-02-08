@@ -1,9 +1,9 @@
 // client.controller.spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
-import { ClientController } from '../client.controller';
-import { ClientService } from '../client.service';
-import { ClientDto } from '../dto/client.dto';
-import { Client } from '../client.entity';
+import { ClientController } from '../src/client/client.controller';
+import { ClientService } from '../src/client/client.service';
+import { ClientDto } from '../src/client/dto/client.dto';
+import { Client } from '../src/client/client.entity';
 import {describe, it, expect, beforeEach, afterEach, jest} from '@jest/globals';
 
 describe('ClientController', () => {
