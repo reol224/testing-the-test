@@ -1,5 +1,5 @@
 // client.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Client } from './client.entity';
@@ -248,7 +248,13 @@ export class ClientService {
   }
 
   async remove(id: number): Promise<void> {
-    await this.clientRepository.delete(id);
+    const clientToRemove = await this.clientRepository.findOneBy({ id: id });
+
+    if (!clientToRemove) {
+      throw new HttpException(`Client with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    } else {
+      await this.clientRepository.remove(clientToRemove);
+    }
   }
 
   async updateClient(id: number, updateClientDto: ClientDto): Promise<Client> {

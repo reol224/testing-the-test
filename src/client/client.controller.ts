@@ -3,7 +3,7 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
+  Get, HttpException, HttpStatus,
   NotAcceptableException,
   NotFoundException,
   Param,
@@ -37,14 +37,14 @@ export class ClientController {
   }
 
   @Delete(':id')
-  async remove(id: number): Promise<void> {
+  async remove(@Param('id') id: number): Promise<void> {
     const clientToRemove = await this.clientService.findOneById(id);
 
     if (!clientToRemove) {
       throw new NotFoundException(`Client with ID ${id} not found`);
     }
 
-    await this.clientService.remove(clientToRemove.id);
+    await this.clientService.remove(id);
   }
 
   @Post('/group')
@@ -63,14 +63,14 @@ export class ClientController {
   }
   @Get(':id')
   async findOneById(@Param('id') id: number): Promise<Client | null> {
-    try {
-      return await this.clientService.findOneById(id);
-    } catch (error) {
-      console.error(error);
-      throw new NotFoundException(`Client with ID ${id} not found`);
-    }
-  }
+      const client = await this.clientService.findOneById(id);
 
+      if (!client) {
+        throw new HttpException(`Client with ID ${id} not found`, HttpStatus.NOT_FOUND);
+      }
+
+      return client;
+    }
   @Get()
   async getClients(): Promise<Client[]> {
     return await this.clientService.getClients();
