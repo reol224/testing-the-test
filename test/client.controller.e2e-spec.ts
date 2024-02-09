@@ -4,14 +4,13 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { ContactModule } from '../src/client/contact.module';
 import * as dt from 'dotenv';
-import {describe, it, expect, beforeEach, afterEach, jest} from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import { Contact } from '../src/client/entities/contact.entity';
-
 
 describe('ContactController (e2e)', () => {
   let app: INestApplication;
   let createdClientId: number;
-  let superClient: Contact
+  let superClient: Contact;
 
   beforeAll(async () => {
     dt.config({ path: '.env' });
@@ -31,12 +30,14 @@ describe('ContactController (e2e)', () => {
       type: 'individual',
       verified: true,
       visible: false,
-      name: "Julia",
-      email: "julia@master.com",
-      phone: "1234567890"
+      name: 'Julia',
+      email: 'julia@master.com',
+      phone: '1234567890',
     };
 
-    const response = await request(app.getHttpServer()).post('/contact').send(superClient);
+    const response = await request(app.getHttpServer())
+      .post('/contact')
+      .send(superClient);
     createdClientId = response.body.id;
   });
 
@@ -54,7 +55,9 @@ describe('ContactController (e2e)', () => {
   });
 
   it('/GET /contact/:id - Existing client', async () => {
-    await request(app.getHttpServer()).get(`/contact/${createdClientId}`).expect(200);
+    await request(app.getHttpServer())
+      .get(`/contact/${createdClientId}`)
+      .expect(200);
   });
 
   it('/GET /contact/:id - Non-existing client', async () => {
@@ -64,95 +67,96 @@ describe('ContactController (e2e)', () => {
       .get(`/contact/${nonExistingClientId}`)
       .expect(404)
       .catch((err) => {
-        console.error('Error:', err.response);  // Log the response body in case of an error
-        throw err;  // Rethrow the error to fail the test
+        console.error('Error:', err.response); // Log the response body in case of an error
+        throw err; // Rethrow the error to fail the test
       });
 
-    expect(response.body.message).toEqual(`Client with ID ${nonExistingClientId} not found`);
+    expect(response.body.message).toEqual(
+      `Client with ID ${nonExistingClientId} not found`,
+    );
   });
-
 
   it('/POST /contact/group - Create Group', async () => {
     const createGroupDto = {
-      name: "The company of John Doe",
+      name: 'The company of John Doe',
       verified: true,
-      verified_method: "remote",
-      status: "missing",
+      verified_method: 'remote',
+      status: 'missing',
       members: [
         {
-          name: "The sister of John Doe",
-          email: "jdsister@example.com",
-          phone: "9876543210",
-          position: "Chief Vision Officer",
-          type: "individual",
+          name: 'The sister of John Doe',
+          email: 'jdsister@example.com',
+          phone: '9876543210',
+          position: 'Chief Vision Officer',
+          type: 'individual',
           verified: true,
-          verified_method: "remote",
-          status: "verified",
+          verified_method: 'remote',
+          status: 'verified',
           avatar: {
-            sm: "path/to/me_sm_avatar.jpg",
-            md: "path/to/me_md_avatar.jpg",
-            lg: "path/to/me_lg_avatar.jpg",
+            sm: 'path/to/me_sm_avatar.jpg',
+            md: 'path/to/me_md_avatar.jpg',
+            lg: 'path/to/me_lg_avatar.jpg',
           },
-          address: "789 Imagination Street",
-          city: "Innovationtopia",
-          province: "Imaginationland",
-          postal_code: "54321",
-          country: "Imaginationstan",
-          employment_type: "fulltime",
-          employer_name: "Creative Minds Inc.",
-          industry: "Innovation",
-          corporation_number: "ABC123",
-          operating_as: "CreativeMinds",
-          corp_jurisdiction: "InnovationState",
-          principal_business: "Creative Innovation",
+          address: '789 Imagination Street',
+          city: 'Innovationtopia',
+          province: 'Imaginationland',
+          postal_code: '54321',
+          country: 'Imaginationstan',
+          employment_type: 'fulltime',
+          employer_name: 'Creative Minds Inc.',
+          industry: 'Innovation',
+          corporation_number: 'ABC123',
+          operating_as: 'CreativeMinds',
+          corp_jurisdiction: 'InnovationState',
+          principal_business: 'Creative Innovation',
         },
         {
-          name: "The brother of John Doe",
-          email: "bjd@example.com",
-          phone: "1234567890",
-          position: "Lead Imaginator",
-          type: "individual",
+          name: 'The brother of John Doe',
+          email: 'bjd@example.com',
+          phone: '1234567890',
+          position: 'Lead Imaginator',
+          type: 'individual',
           verified: true,
-          verified_method: "remote",
-          status: "verified",
+          verified_method: 'remote',
+          status: 'verified',
           avatar: {
-            sm: "path/to/wl_sm_avatar.jpg",
-            md: "path/to/wl_md_avatar.jpg",
-            lg: "path/to/wl_lg_avatar.jpg",
+            sm: 'path/to/wl_sm_avatar.jpg',
+            md: 'path/to/wl_md_avatar.jpg',
+            lg: 'path/to/wl_lg_avatar.jpg',
           },
-          address: "456 Imagination Avenue",
-          city: "Imagination City",
-          province: "Imaginationland",
-          postal_code: "12345",
-          country: "Imaginationstan",
-          employment_type: "fulltime",
-          employer_name: "Creative Minds Inc.",
-          industry: "Innovation",
-          corporation_number: "XYZ789",
-          operating_as: "CreativeMinds",
-          corp_jurisdiction: "InnovationState",
-          principal_business: "Creative Innovation",
+          address: '456 Imagination Avenue',
+          city: 'Imagination City',
+          province: 'Imaginationland',
+          postal_code: '12345',
+          country: 'Imaginationstan',
+          employment_type: 'fulltime',
+          employer_name: 'Creative Minds Inc.',
+          industry: 'Innovation',
+          corporation_number: 'XYZ789',
+          operating_as: 'CreativeMinds',
+          corp_jurisdiction: 'InnovationState',
+          principal_business: 'Creative Innovation',
         },
       ],
-      email: "johndoeinc@example.com",
-      phone: "5551234567",
-      address: "123 Imagination Street",
-      city: "Innovation City",
-      province: "Imaginationland",
-      postal_code: "67890",
-      country: "Imaginationstan",
-      employment_type: "fulltime",
-      employer_name: "Creative Minds Inc.",
-      industry: "Innovation",
-      position: "CEO",
-      corporation_number: "XYZ456",
-      operating_as: "CreativeMinds",
-      corp_jurisdiction: "InnovationState",
-      principal_business: "Creative Innovation",
+      email: 'johndoeinc@example.com',
+      phone: '5551234567',
+      address: '123 Imagination Street',
+      city: 'Innovation City',
+      province: 'Imaginationland',
+      postal_code: '67890',
+      country: 'Imaginationstan',
+      employment_type: 'fulltime',
+      employer_name: 'Creative Minds Inc.',
+      industry: 'Innovation',
+      position: 'CEO',
+      corporation_number: 'XYZ456',
+      operating_as: 'CreativeMinds',
+      corp_jurisdiction: 'InnovationState',
+      principal_business: 'Creative Innovation',
       avatar: {
-        sm: "path/to/bi_sm_avatar.jpg",
-        md: "path/to/bi_md_avatar.jpg",
-        lg: "path/to/bi_lg_avatar.jpg",
+        sm: 'path/to/bi_sm_avatar.jpg',
+        md: 'path/to/bi_md_avatar.jpg',
+        lg: 'path/to/bi_lg_avatar.jpg',
       },
       // client_identity: {
       //   client_id: 1,
@@ -225,113 +229,113 @@ describe('ContactController (e2e)', () => {
 
   it('/POST /contact', async () => {
     const createClientDto = {
-      name: "John CREATED",
-      email: "john.created@example.com",
-      phone: "1234567890",
-      address: "123 Main Street",
-      city: "Techville",
-      province: "Techland",
-      postal_code: "12345",
-      country: "Techlandia",
-      employment_type: "fulltime",
-      employer_name: "Tech Solutions",
-      industry: "Technology",
-      position: "Software Engineer",
-      corporation_number: "ABC123",
-      operating_as: "TechSolutions",
-      corp_jurisdiction: "TechState",
-      principal_business: "Tech Services",
-      type: "individual",
+      name: 'John CREATED',
+      email: 'john.created@example.com',
+      phone: '1234567890',
+      address: '123 Main Street',
+      city: 'Techville',
+      province: 'Techland',
+      postal_code: '12345',
+      country: 'Techlandia',
+      employment_type: 'fulltime',
+      employer_name: 'Tech Solutions',
+      industry: 'Technology',
+      position: 'Software Engineer',
+      corporation_number: 'ABC123',
+      operating_as: 'TechSolutions',
+      corp_jurisdiction: 'TechState',
+      principal_business: 'Tech Services',
+      type: 'individual',
       verified: true,
-      verified_method: "remote",
-      status: "verified",
-      partner_relationship: "spouse",
-      employment_status: "fulltime",
+      verified_method: 'remote',
+      status: 'verified',
+      partner_relationship: 'spouse',
+      employment_status: 'fulltime',
       visible: true,
       completed_percent: 75,
-      avatar_image_id: "avatar123",
+      avatar_image_id: 'avatar123',
       avatar: {
-        sm: "path/to/sm_avatar.jpg",
-        md: "path/to/md_avatar.jpg",
-        lg: "path/to/lg_avatar.jpg",
+        sm: 'path/to/sm_avatar.jpg',
+        md: 'path/to/md_avatar.jpg',
+        lg: 'path/to/lg_avatar.jpg',
       },
       client_identity: {
         client_id: 1,
-        method: "credit",
-        status: "verified",
-        other_method: "other",
-        other_requested_at: "2024-01-01T00:00:00Z",
-        notes: "Additional notes",
-        doc_expiry_at: "2025-01-01T00:00:00Z",
-        doc_issue_at: "2024-01-01T00:00:00Z",
-        doc_type: "ID",
-        doc_number: "ID123",
-        doc_state: "TechState",
-        doc_country: "Techlandia",
+        method: 'credit',
+        status: 'verified',
+        other_method: 'other',
+        other_requested_at: '2024-01-01T00:00:00Z',
+        notes: 'Additional notes',
+        doc_expiry_at: '2025-01-01T00:00:00Z',
+        doc_issue_at: '2024-01-01T00:00:00Z',
+        doc_type: 'ID',
+        doc_number: 'ID123',
+        doc_state: 'TechState',
+        doc_country: 'Techlandia',
         doc_front_photo_id: 123,
         doc_back_photo_id: 456,
-        credit_bureau_name: "Bureau123",
-        credit_reference_number: "Ref123",
+        credit_bureau_name: 'Bureau123',
+        credit_reference_number: 'Ref123',
         risk_score: 80,
-        risk_labels: ["High Risk"],
-        updated_at: "2024-01-01T00:00:00Z",
+        risk_labels: ['High Risk'],
+        updated_at: '2024-01-01T00:00:00Z',
       },
       verification: {
-        name: "John CREATED",
-        email: "john.created@example.com",
-        phone: "1234567890",
+        name: 'John CREATED',
+        email: 'john.created@example.com',
+        phone: '1234567890',
         verified: true,
       },
       requirements: [
         {
-          status: "pending",
-          label: "ID Verification",
+          status: 'pending',
+          label: 'ID Verification',
           requirement_type_id: 1,
         },
       ],
       contracts: [
         {
           client_requirement_id: 1,
-          type: "buyer",
-          property_address: "456 Tech Avenue",
-          commencing_at: "2024-02-15T12:00:00Z",
-          expire_at: "2024-03-15T12:00:00Z",
-          selling_price: "500000",
+          type: 'buyer',
+          property_address: '456 Tech Avenue',
+          commencing_at: '2024-02-15T12:00:00Z',
+          expire_at: '2024-03-15T12:00:00Z',
+          selling_price: '500000',
           selling_exclusive: true,
-          total_commission: "5%",
-          buyer_commission: "2%",
-          status: "active",
+          total_commission: '5%',
+          buyer_commission: '2%',
+          status: 'active',
         },
       ],
       fintracs: [
         {
           client_requirement_id: 1,
-          type: "individual",
-          property_address: "456 Tech Avenue",
-          corporation_legal_name: "Tech Solutions",
-          director_names: "Jimmy Woe, Susan Smith",
-          type_of_verification: "ID Verification",
-          status: "valid",
+          type: 'individual',
+          property_address: '456 Tech Avenue',
+          corporation_legal_name: 'Tech Solutions',
+          director_names: 'Jimmy Woe, Susan Smith',
+          type_of_verification: 'ID Verification',
+          status: 'valid',
         },
       ],
       members: [
         {
-          name: "Susan Smith",
-          email: "susan.smith@example.com",
-          phone: "9876543210",
-          position: "Lead Developer",
-          type: "individual",
+          name: 'Susan Smith',
+          email: 'susan.smith@example.com',
+          phone: '9876543210',
+          position: 'Lead Developer',
+          type: 'individual',
           verified: true,
-          verified_method: "other",
-          status: "verified",
+          verified_method: 'other',
+          status: 'verified',
         },
       ],
       verification_history: [
         {
-          type: "match",
-          label: "Name",
-          value: "John Created",
-          source_date: "2024-02-08T10:00:00Z",
+          type: 'match',
+          label: 'Name',
+          value: 'John Created',
+          source_date: '2024-02-08T10:00:00Z',
         },
       ],
     };
@@ -345,15 +349,15 @@ describe('ContactController (e2e)', () => {
         expect(res.body.email).toEqual(createClientDto.email);
         expect(res.body.name).toEqual(createClientDto.name);
         createdClientId = res.body.id;
-      })
+      });
   });
 
   it('/DELETE /contact/:id - Existing client', async () => {
     // Assuming you have an existing client ID (replace createdClientId with a real ID)
     const createClientDto = {
-      name: "John Deleted",
-      email: "john.deleted@example.com",
-      phone: "1234567890",
+      name: 'John Deleted',
+      email: 'john.deleted@example.com',
+      phone: '1234567890',
     };
 
     const createResponse = await request(app.getHttpServer())
@@ -377,18 +381,19 @@ describe('ContactController (e2e)', () => {
       .delete(`/contact/${nonExistingClientId}`)
       .expect(404)
       .expect((res) => {
-        console.log(res.body);  // Log the response body for inspection
+        console.log(res.body); // Log the response body for inspection
         const errorResponse = res.body;
-        expect(errorResponse.message).toEqual(`Client with ID ${nonExistingClientId} not found`);
+        expect(errorResponse.message).toEqual(
+          `Client with ID ${nonExistingClientId} not found`,
+        );
       });
   });
 
-
   it('/PATCH /contact/:id - Existing client', async () => {
     const createClientDto = {
-      name: "John Patched",
-      email: "john.patched@example.com",
-      phone: "1234567890",
+      name: 'John Patched',
+      email: 'john.patched@example.com',
+      phone: '1234567890',
     };
 
     const createResponse = await request(app.getHttpServer())
@@ -407,7 +412,9 @@ describe('ContactController (e2e)', () => {
       .send(updateClientDto)
       .expect(200);
 
-    expect(updateResponse.body).toEqual(expect.objectContaining(updateClientDto));
+    expect(updateResponse.body).toEqual(
+      expect.objectContaining(updateClientDto),
+    );
   });
 
   it('/PATCH /contact/:id - Non-existing client', async () => {
@@ -425,12 +432,9 @@ describe('ContactController (e2e)', () => {
       .expect(404)
       .expect((res) => {
         const errorResponse = res.body;
-        expect(errorResponse.message).toEqual(`Client with ID ${nonExistingClientId} not found`);
+        expect(errorResponse.message).toEqual(
+          `Client with ID ${nonExistingClientId} not found`,
+        );
       });
   });
-
-
-
-
-
 });

@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Delete,
-  Get, HttpException, HttpStatus,
+  Get,
+  HttpException,
+  HttpStatus,
   NotAcceptableException,
   NotFoundException,
   Param,
@@ -18,11 +20,25 @@ export class ContactController {
   constructor(private readonly clientService: ContactService) {}
 
   @Get()
-  async getClients(): Promise<Contact[]> {
+  async get(): Promise<Contact[]> {
     return await this.clientService.getClients();
   }
+
+  @Get(':id')
+  async findOneById(@Param('id') id: number): Promise<Contact | null> {
+    const client = await this.clientService.findOneById(id);
+
+    if (!client) {
+      throw new HttpException(
+        `Client with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return client;
+  }
   @Post()
-  async addClient(@Body() createClientDto: ContactDto): Promise<Contact> {
+  async add(@Body() createClientDto: ContactDto): Promise<Contact> {
     try {
       return await this.clientService.createClient(createClientDto);
     } catch (error) {
@@ -31,8 +47,19 @@ export class ContactController {
     }
   }
 
+  @Post('/group')
+  async addGroup(@Body() createGroupDto: ContactDto): Promise<Contact> {
+    createGroupDto.type = 'group';
+    return await this.clientService.createGroup(createGroupDto);
+  }
+
+  @Post('/org')
+  async addOrg(@Body() createOrgDto: ContactDto): Promise<Contact> {
+    return await this.clientService.createOrg(createOrgDto);
+  }
+
   @Patch(':id')
-  async updateClient(
+  async update(
     @Param('id') id: number,
     @Body() updateClientDto: ContactDto,
   ): Promise<Contact> {
@@ -49,30 +76,4 @@ export class ContactController {
 
     await this.clientService.remove(id);
   }
-
-  @Post('/group')
-  async addGroup(@Body() createGroupDto: ContactDto): Promise<Contact> {
-    createGroupDto.type = 'group';
-    return await this.clientService.createGroup(
-      createGroupDto
-    );
-  }
-
-  @Post('/org')
-  async addOrg(@Body() createOrgDto: ContactDto): Promise<Contact> {
-    return await this.clientService.createOrg(
-      createOrgDto
-    );
-  }
-  @Get(':id')
-  async findOneById(@Param('id') id: number): Promise<Contact | null> {
-      const client = await this.clientService.findOneById(id);
-
-      if (!client) {
-        throw new HttpException(`Client with ID ${id} not found`, HttpStatus.NOT_FOUND);
-      }
-
-      return client;
-    }
-
 }

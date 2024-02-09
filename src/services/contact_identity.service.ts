@@ -31,7 +31,7 @@ export class ContactIdentityService {
 
     const clientIdentity = this.clientIdentityRepository.create({
       ...createClientIdentityDto,
-      status: createClientIdentityDto.status || 'missing'
+      status: createClientIdentityDto.status || 'missing',
     });
     return this.clientIdentityRepository.save(clientIdentity);
   }

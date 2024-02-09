@@ -13,9 +13,7 @@ import { RequirementEntity } from './requirement.entity';
 import { Contract } from './contract.entity';
 import { Fintrac } from './fintrac.entity';
 import { VerificationHistory } from './verification_history.entity';
-import { FintracDto } from '../dtos/fintrac.dto';
 import { RequirementDto } from '../dtos/requirement.dto';
-import { ContractDto } from '../dtos/contract.dto';
 import { ContactVerificationHistoryDto } from '../dtos/contact_verification_history.dto';
 import { ContactIdentity } from './contact_identity.entity';
 
@@ -146,7 +144,7 @@ export class Contact {
     lg: string;
   };
 
-  @ManyToOne(() => ContactIdentity,  { nullable: true, cascade: true })
+  @ManyToOne(() => ContactIdentity, { nullable: true, cascade: true })
   @JoinColumn({ name: 'client_identity_id' })
   client_identity?: ContactIdentity;
 

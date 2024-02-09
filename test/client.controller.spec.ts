@@ -4,7 +4,7 @@ import { ContactController } from '../src/client/contact.controller';
 import { ContactService } from '../src/services/contact.service';
 import { ContactDto } from '../src/client/dtos/contact.dto';
 import { Contact } from '../src/client/entities/contact.entity';
-import {describe, it, expect, beforeEach, afterEach, jest} from '@jest/globals';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 describe('ClientController', () => {
   let controller: ContactController;
@@ -107,7 +107,7 @@ describe('ClientController', () => {
       jest.spyOn(service, 'createClient').mockResolvedValue(createdClient);
 
       // Call the addClient method
-      const result = await controller.addClient(createClientDto);
+      const result = await controller.add(createClientDto);
 
       // Assert that the createClient method was called with the correct arguments
       expect(service.createClient).toHaveBeenCalledWith(createClientDto);

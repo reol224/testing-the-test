@@ -1,5 +1,10 @@
 // contact.service.ts
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Contact } from '../client/entities/contact.entity';
@@ -17,7 +22,7 @@ import { ContactVerificationHistoryDto } from '../client/dtos/contact_verificati
 
 @Injectable()
 export class ContactService {
-    constructor(
+  constructor(
     @InjectRepository(Contact)
     private readonly clientRepository: Repository<Contact>,
 
@@ -78,7 +83,9 @@ export class ContactService {
       avatar_image_id: data.avatar_image_id,
       avatar: data.avatar,
 
-      client_identity: data.client_identity ? this.clientIdentityRepository.create(data.client_identity) : undefined,
+      client_identity: data.client_identity
+        ? this.clientIdentityRepository.create(data.client_identity)
+        : undefined,
 
       //verification: data.verification ? this.clientRepository.create(data.verification) : undefined,
 
@@ -91,9 +98,7 @@ export class ContactService {
     return this.clientRepository.save(client);
   }
 
-  async createGroup(
-    createGroupDto: ContactDto
-  ): Promise<Contact> {
+  async createGroup(createGroupDto: ContactDto): Promise<Contact> {
     const {
       members,
       verification_history,
@@ -187,13 +192,19 @@ export class ContactService {
     const clientToRemove = await this.clientRepository.findOneBy({ id: id });
 
     if (!clientToRemove) {
-      throw new HttpException(`Client with ID ${id} not found`, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        `Client with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     } else {
       await this.clientRepository.remove(clientToRemove);
     }
   }
 
-  async updateClient(id: number, updateClientDto: ContactDto): Promise<Contact> {
+  async updateClient(
+    id: number,
+    updateClientDto: ContactDto,
+  ): Promise<Contact> {
     const existingClient = await this.clientRepository.findOneBy({ id: id });
 
     if (!existingClient) {
