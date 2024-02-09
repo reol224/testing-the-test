@@ -1,4 +1,3 @@
-// client.controller.ts
 import {
   Body,
   Controller,
@@ -10,16 +9,20 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ClientService } from './client.service';
-import { Client } from './client.entity';
-import { ClientDto } from './dto/client.dto';
+import { ContactService } from '../services/contact.service';
+import { Contact } from './entities/contact.entity';
+import { ContactDto } from './dtos/contact.dto';
 
 @Controller('contact')
-export class ClientController {
-  constructor(private readonly clientService: ClientService) {}
+export class ContactController {
+  constructor(private readonly clientService: ContactService) {}
 
+  @Get()
+  async getClients(): Promise<Contact[]> {
+    return await this.clientService.getClients();
+  }
   @Post()
-  async addClient(@Body() createClientDto: ClientDto): Promise<Client> {
+  async addClient(@Body() createClientDto: ContactDto): Promise<Contact> {
     try {
       return await this.clientService.createClient(createClientDto);
     } catch (error) {
@@ -31,8 +34,8 @@ export class ClientController {
   @Patch(':id')
   async updateClient(
     @Param('id') id: number,
-    @Body() updateClientDto: ClientDto,
-  ): Promise<Client> {
+    @Body() updateClientDto: ContactDto,
+  ): Promise<Contact> {
     return await this.clientService.updateClient(id, updateClientDto);
   }
 
@@ -48,7 +51,7 @@ export class ClientController {
   }
 
   @Post('/group')
-  async addGroup(@Body() createGroupDto: ClientDto): Promise<Client> {
+  async addGroup(@Body() createGroupDto: ContactDto): Promise<Contact> {
     createGroupDto.type = 'group';
     return await this.clientService.createGroup(
       createGroupDto
@@ -56,13 +59,13 @@ export class ClientController {
   }
 
   @Post('/org')
-  async addOrg(@Body() createOrgDto: ClientDto): Promise<Client> {
+  async addOrg(@Body() createOrgDto: ContactDto): Promise<Contact> {
     return await this.clientService.createOrg(
       createOrgDto
     );
   }
   @Get(':id')
-  async findOneById(@Param('id') id: number): Promise<Client | null> {
+  async findOneById(@Param('id') id: number): Promise<Contact | null> {
       const client = await this.clientService.findOneById(id);
 
       if (!client) {
@@ -71,8 +74,5 @@ export class ClientController {
 
       return client;
     }
-  @Get()
-  async getClients(): Promise<Client[]> {
-    return await this.clientService.getClients();
-  }
+
 }

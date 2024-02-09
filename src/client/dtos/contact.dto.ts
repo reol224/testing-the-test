@@ -1,10 +1,10 @@
-import { RequirementDto } from '../../requirement/dto/requirement.dto';
-import { ContractDto } from '../../contract/dto/contract.dto';
-import { FintracDto } from '../../fintrac/dto/fintrac.dto';
-import { ClientVerificationHistoryDto } from '../client_verification_history/dto/client_verification_history.dto';
-import { ClientIdentityDto } from '../client_identity/dto/client_identity.dto';
+import { RequirementDto } from './requirement.dto';
+import { ContractDto } from './contract.dto';
+import { FintracDto } from './fintrac.dto';
+import { ContactVerificationHistoryDto } from './contact_verification_history.dto';
+import { ContactIdentityDto } from './contact_identity.dto';
 
-export class ClientDto {
+export class ContactDto {
   name!: string;
   email!: string;
   phone!: string;
@@ -47,11 +47,11 @@ export class ClientDto {
     md: string;
     lg: string;
   };
-  client_identity?: ClientIdentityDto;
-  verification?: ClientDto;
+  client_identity?: ContactIdentityDto;
+  verification?: ContactDto;
   requirements?: RequirementDto[];
   contracts?: ContractDto[];
   fintracs?: FintracDto[];
-  members?: ClientDto[];
-  verification_history?: ClientVerificationHistoryDto[];
+  members?: ContactDto[];
+  verification_history?: ContactVerificationHistoryDto[];
 }

@@ -1,8 +1,8 @@
-import { ClientDto } from '../../client/dto/client.dto';
+import { ContactDto } from './contact.dto';
 
 export class RequirementDto {
   id: number;
-  client: ClientDto;
+  client: ContactDto;
   status: 'pending' | 'completed' | 'checked';
   label: string;
   requirement_type_id: number;

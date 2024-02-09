@@ -1,25 +1,23 @@
-// client-identity.service.ts
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ClientIdentity } from './client_identity.entity';
-import { ClientIdentityDto } from './dto/client_identity.dto';
-import { Client } from '../client.entity';
+import { ContactIdentity } from '../client/entities/contact_identity.entity';
+import { ContactIdentityDto } from '../client/dtos/contact_identity.dto';
+import { Contact } from '../client/entities/contact.entity';
 
 @Injectable()
-export class ClientIdentityService {
+export class ContactIdentityService {
   constructor(
-    @InjectRepository(ClientIdentity)
-    private readonly clientIdentityRepository: Repository<ClientIdentity>,
+    @InjectRepository(ContactIdentity)
+    private readonly clientIdentityRepository: Repository<ContactIdentity>,
 
-    @InjectRepository(Client)
-    private readonly clientRepository: Repository<Client>,
+    @InjectRepository(Contact)
+    private readonly clientRepository: Repository<Contact>,
   ) {}
 
   async create(
-    createClientIdentityDto: ClientIdentityDto,
-  ): Promise<ClientIdentity> {
+    createClientIdentityDto: ContactIdentityDto,
+  ): Promise<ContactIdentity> {
     if (
       !createClientIdentityDto.status ||
       createClientIdentityDto.status !== 'rejected'
@@ -40,8 +38,8 @@ export class ClientIdentityService {
 
   async update(
     id: number,
-    updateClientIdentityDto: ClientIdentityDto,
-  ): Promise<ClientIdentity> {
+    updateClientIdentityDto: ContactIdentityDto,
+  ): Promise<ContactIdentity> {
     const existingClientIdentity =
       await this.clientIdentityRepository.findOneBy({ id: id });
 
@@ -57,7 +55,7 @@ export class ClientIdentityService {
     return this.clientIdentityRepository.save(updatedClientIdentity);
   }
 
-  async findById(id: number): Promise<ClientIdentity | null> {
+  async findById(id: number): Promise<ContactIdentity | null> {
     return this.clientIdentityRepository.findOneBy({ id: id });
   }
 }

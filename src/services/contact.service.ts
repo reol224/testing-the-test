@@ -1,28 +1,28 @@
-// client.service.ts
+// contact.service.ts
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Client } from './client.entity';
-import { ClientDto } from './dto/client.dto';
-import { ClientIdentity } from './client_identity/client_identity.entity';
-import { RequirementEntity } from '../requirement/requirement.entity';
-import { Contract } from '../contract/contract.entity';
-import { ClientIdentityDto } from './client_identity/dto/client_identity.dto';
-import { RequirementDto } from '../requirement/dto/requirement.dto';
-import { ContractDto } from '../contract/dto/contract.dto';
-import { FintracDto } from '../fintrac/dto/fintrac.dto';
-import { Fintrac } from '../fintrac/fintrac.entity';
-import { ClientVerificationHistory } from './client_verification_history/client_verification_history.entity';
-import { ClientVerificationHistoryDto } from './client_verification_history/dto/client_verification_history.dto';
+import { Contact } from '../client/entities/contact.entity';
+import { ContactDto } from '../client/dtos/contact.dto';
+import { ContactIdentity } from '../client/entities/contact_identity.entity';
+import { RequirementEntity } from '../client/entities/requirement.entity';
+import { Contract } from '../client/entities/contract.entity';
+import { ContactIdentityDto } from '../client/dtos/contact_identity.dto';
+import { RequirementDto } from '../client/dtos/requirement.dto';
+import { ContractDto } from '../client/dtos/contract.dto';
+import { FintracDto } from '../client/dtos/fintrac.dto';
+import { Fintrac } from '../client/entities/fintrac.entity';
+import { VerificationHistory } from '../client/entities/verification_history.entity';
+import { ContactVerificationHistoryDto } from '../client/dtos/contact_verification_history.dto';
 
 @Injectable()
-export class ClientService {
+export class ContactService {
     constructor(
-    @InjectRepository(Client)
-    private readonly clientRepository: Repository<Client>,
+    @InjectRepository(Contact)
+    private readonly clientRepository: Repository<Contact>,
 
-    @InjectRepository(ClientIdentity)
-    private readonly clientIdentityRepository: Repository<ClientIdentityDto>,
+    @InjectRepository(ContactIdentity)
+    private readonly clientIdentityRepository: Repository<ContactIdentityDto>,
 
     @InjectRepository(RequirementEntity)
     private readonly requirementRepository: Repository<RequirementDto>,
@@ -30,14 +30,14 @@ export class ClientService {
     @InjectRepository(Contract)
     private readonly contractRepository: Repository<ContractDto>,
 
-    @InjectRepository(ClientVerificationHistory)
-    private readonly clientVerificationHistoryRepository: Repository<ClientVerificationHistoryDto>,
+    @InjectRepository(VerificationHistory)
+    private readonly clientVerificationHistoryRepository: Repository<ContactVerificationHistoryDto>,
 
     @InjectRepository(Fintrac)
     private readonly fintracRepository: Repository<FintracDto>,
   ) {}
 
-  async createClient(createClientDto: ClientDto): Promise<Client> {
+  async createClient(createClientDto: ContactDto): Promise<Contact> {
     const {
       type,
       verified,
@@ -92,8 +92,8 @@ export class ClientService {
   }
 
   async createGroup(
-    createGroupDto: ClientDto
-  ): Promise<Client> {
+    createGroupDto: ContactDto
+  ): Promise<Contact> {
     const {
       members,
       verification_history,
@@ -165,81 +165,17 @@ export class ClientService {
     return await this.clientRepository.save(group);
   }
 
-  async createOrg(createOrgDto: ClientDto): Promise<Client> {
-    const orgDto: ClientDto = { ...createOrgDto, type: 'organization' };
+  async createOrg(createOrgDto: ContactDto): Promise<Contact> {
+    const orgDto: ContactDto = { ...createOrgDto, type: 'organization' };
 
     return await this.createGroup(orgDto);
   }
 
-  // async createGroup(createGroupDto: ClientDto, types: 'group' | 'organization'): Promise<Client> {
-  //   const { members, ...groupData } = createGroupDto;
-  //
-  //   const group = this.clientRepository.create({
-  //     name: groupData.name,
-  //     type: types,
-  //     email: groupData.email,
-  //     phone: groupData.phone,
-  //     address: groupData.address,
-  //     city: groupData.city,
-  //     province: groupData.province,
-  //     postal_code: groupData.postal_code,
-  //     country: groupData.country,
-  //     employment_type: groupData.employment_type,
-  //     employer_name: groupData.employer_name,
-  //     industry: groupData.industry,
-  //     position: groupData.position,
-  //     corporation_number: groupData.corporation_number,
-  //     operating_as: groupData.operating_as,
-  //     corp_jurisdiction: groupData.corp_jurisdiction,
-  //     principal_business: groupData.principal_business,
-  //     verified: groupData.verified || false,
-  //     verified_method: groupData.verified_method || 'other',
-  //     status: groupData.status || 'missing',
-  //     avatar: groupData.avatar,
-  //     members: [],
-  //   });
-  //
-  //
-  //   if (members && members.length > 0) {
-  //     for (const memberDto of members) {
-  //       const member = this.clientRepository.create({
-  //         name: memberDto.name,
-  //         email: memberDto.email,
-  //         phone: memberDto.phone,
-  //         address: memberDto.address,
-  //         city: memberDto.city,
-  //         province: memberDto.province,
-  //         postal_code: memberDto.postal_code,
-  //         country: memberDto.country,
-  //         employment_type: memberDto.employment_type,
-  //         employer_name: memberDto.employer_name,
-  //         industry: memberDto.industry,
-  //         position: memberDto.position,
-  //         corporation_number: memberDto.corporation_number,
-  //         operating_as: memberDto.operating_as,
-  //         corp_jurisdiction: memberDto.corp_jurisdiction,
-  //         principal_business: memberDto.principal_business,
-  //         type: memberDto.type || 'individual',
-  //         verified: memberDto.verified || false,
-  //         verified_method: memberDto.verified_method || 'other',
-  //         status: memberDto.status || 'missing',
-  //         avatar: memberDto.avatar,
-  //       });
-  //
-  //       const savedMember = await this.clientRepository.save(member);
-  //       group.members.push(savedMember);
-  //     }
-  //   }
-  //
-  //
-  //   return await this.clientRepository.save(group);
-  // }
-  async getClients(): Promise<Client[]> {
+  async getClients(): Promise<Contact[]> {
     return await this.clientRepository.find();
   }
 
-  async findOneById(id: number): Promise<Client | null> {
-    //TODO RETURNS EMPTY
+  async findOneById(id: number): Promise<Contact | null> {
     try {
       return await this.clientRepository.findOneBy({ id: id });
     } catch (error) {
@@ -257,7 +193,7 @@ export class ClientService {
     }
   }
 
-  async updateClient(id: number, updateClientDto: ClientDto): Promise<Client> {
+  async updateClient(id: number, updateClientDto: ContactDto): Promise<Contact> {
     const existingClient = await this.clientRepository.findOneBy({ id: id });
 
     if (!existingClient) {
@@ -266,7 +202,7 @@ export class ClientService {
 
     const updatedClient = this.clientRepository.merge(
       existingClient,
-      updateClientDto as Client, //TODO CHECK DEEP PARTIAL TOO,
+      updateClientDto as Contact,
     );
 
     return this.clientRepository.save(updatedClient);

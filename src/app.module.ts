@@ -1,10 +1,9 @@
-// app.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ClientModule } from './client/client.module';
-import { ClientController } from './client/client.controller';
+import { ContactModule } from './client/contact.module';
+import { ContactController } from './client/contact.controller';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -20,10 +19,10 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true,
       autoLoadEntities: true,
     }),
-    ClientModule,
+    ContactModule,
     AuthModule,
   ],
-  controllers: [AppController, ClientController],
+  controllers: [AppController, ContactController],
   providers: [AppService],
 })
 export class AppModule {}

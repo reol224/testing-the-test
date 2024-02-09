@@ -1,4 +1,4 @@
-// client.entity.ts
+// contact.entity.ts
 import {
   Column,
   Entity,
@@ -9,18 +9,18 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { RequirementEntity } from '../requirement/requirement.entity';
-import { Contract } from '../contract/contract.entity';
-import { Fintrac } from '../fintrac/fintrac.entity';
-import { ClientVerificationHistory } from './client_verification_history/client_verification_history.entity';
-import { FintracDto } from '../fintrac/dto/fintrac.dto';
-import { RequirementDto } from '../requirement/dto/requirement.dto';
-import { ContractDto } from '../contract/dto/contract.dto';
-import { ClientVerificationHistoryDto } from './client_verification_history/dto/client_verification_history.dto';
-import { ClientIdentity } from './client_identity/client_identity.entity';
+import { RequirementEntity } from './requirement.entity';
+import { Contract } from './contract.entity';
+import { Fintrac } from './fintrac.entity';
+import { VerificationHistory } from './verification_history.entity';
+import { FintracDto } from '../dtos/fintrac.dto';
+import { RequirementDto } from '../dtos/requirement.dto';
+import { ContractDto } from '../dtos/contract.dto';
+import { ContactVerificationHistoryDto } from '../dtos/contact_verification_history.dto';
+import { ContactIdentity } from './contact_identity.entity';
 
 @Entity()
-export class Client {
+export class Contact {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -146,13 +146,13 @@ export class Client {
     lg: string;
   };
 
-  @ManyToOne(() => ClientIdentity,  { nullable: true, cascade: true })
+  @ManyToOne(() => ContactIdentity,  { nullable: true, cascade: true })
   @JoinColumn({ name: 'client_identity_id' })
-  client_identity?: ClientIdentity;
+  client_identity?: ContactIdentity;
 
-  @ManyToOne(() => Client, { nullable: true, cascade: true })
+  @ManyToOne(() => Contact, { nullable: true, cascade: true })
   @JoinColumn({ name: 'verification_id' })
-  verification?: Client;
+  verification?: Contact;
 
   @OneToMany(() => RequirementEntity, (requirement) => requirement.client, {
     nullable: true,
@@ -165,12 +165,12 @@ export class Client {
   @OneToMany(() => Fintrac, (fintrac) => fintrac.client, { nullable: true })
   fintracs?: Fintrac[];
 
-  @ManyToMany(() => Client)
+  @ManyToMany(() => Contact)
   @JoinTable()
-  members: Client[];
+  members: Contact[];
 
-  @OneToMany(() => ClientVerificationHistory, (history) => history.client, {
+  @OneToMany(() => VerificationHistory, (history) => history.client, {
     nullable: true,
   })
-  verification_history?: ClientVerificationHistoryDto[];
+  verification_history?: ContactVerificationHistoryDto[];
 }

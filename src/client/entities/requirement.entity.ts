@@ -1,14 +1,14 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Client } from '../client/client.entity';
+import { Contact } from './contact.entity';
 
 @Entity()
 export class RequirementEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Client, (client) => client.requirements)
+  @ManyToOne(() => Contact, (client) => client.requirements)
   @JoinColumn({ name: 'client_id' })
-  client: Client;
+  client: Contact;
 
   @Column({
     type: 'enum',

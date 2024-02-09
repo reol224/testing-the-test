@@ -1,21 +1,21 @@
 // client.controller.spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
-import { ClientController } from '../src/client/client.controller';
-import { ClientService } from '../src/client/client.service';
-import { ClientDto } from '../src/client/dto/client.dto';
-import { Client } from '../src/client/client.entity';
+import { ContactController } from '../src/client/contact.controller';
+import { ContactService } from '../src/services/contact.service';
+import { ContactDto } from '../src/client/dtos/contact.dto';
+import { Contact } from '../src/client/entities/contact.entity';
 import {describe, it, expect, beforeEach, afterEach, jest} from '@jest/globals';
 
 describe('ClientController', () => {
-  let controller: ClientController;
-  let service: ClientService;
+  let controller: ContactController;
+  let service: ContactService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [ClientController],
+      controllers: [ContactController],
       providers: [
         {
-          provide: ClientService,
+          provide: ContactService,
           useValue: {
             createClient: jest.fn(),
           },
@@ -23,13 +23,13 @@ describe('ClientController', () => {
       ],
     }).compile();
 
-    controller = module.get<ClientController>(ClientController);
-    service = module.get<ClientService>(ClientService);
+    controller = module.get<ContactController>(ContactController);
+    service = module.get<ContactService>(ContactService);
   });
 
   describe('addClient', () => {
     it('should create a new client and return it', async () => {
-      const createClientDto: ClientDto = {
+      const createClientDto: ContactDto = {
         name: 'Kevin Smith',
         email: 'kevin.smith@example.com',
         phone: '123-456-7890',
@@ -62,7 +62,7 @@ describe('ClientController', () => {
         },
       };
 
-      const createdClient: Client = {
+      const createdClient: Contact = {
         id: 1,
         name: 'Kevin Smith',
         email: 'kevin.smith@example.com',

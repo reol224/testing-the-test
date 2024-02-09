@@ -1,14 +1,14 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Client } from '../../client.entity';
+import { Contact } from './contact.entity';
 
 @Entity()
-export class ClientIdentityWatchlist {
+export class IdentityWatchlist {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Client)
+  @ManyToOne(() => Contact)
   @JoinColumn({ name: 'client_id' })
-  client: Client;
+  client: Contact;
 
   @Column({
     type: 'enum',

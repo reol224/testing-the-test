@@ -1,6 +1,4 @@
-// client-identity.dto.ts
-
-export class ClientIdentityDto {
+export class ContactIdentityDto {
   client_id: number;
   method: 'photoid' | 'credit' | 'remote' | 'other';
   status: 'verified' | 'rejected' | 'manually_verified' | 'missing';

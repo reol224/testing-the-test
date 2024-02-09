@@ -1,8 +1,8 @@
-import { ClientDto } from '../../client/dto/client.dto';
+import { ContactDto } from './contact.dto';
 
 export class FintracDto {
   id: number;
-  client: ClientDto;
+  client: ContactDto;
   client_requirement_id: number;
   type: 'individual' | 'organization' | 'group';
   property_address?: string;

@@ -1,14 +1,14 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Client } from '../client/client.entity';
+import { Contact } from './contact.entity';
 
 @Entity()
 export class Contract {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Client, (client) => client.contracts)
+  @ManyToOne(() => Contact, (client) => client.contracts)
   @JoinColumn({ name: 'client_id' })
-  client: Client;
+  client: Contact;
 
   @Column({ name: 'client_requirement_id' })
   client_requirement_id: number;

@@ -2,21 +2,21 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { ClientModule } from '../src/client/client.module';
+import { ContactModule } from '../src/client/contact.module';
 import * as dt from 'dotenv';
 import {describe, it, expect, beforeEach, afterEach, jest} from '@jest/globals';
-import { Client } from '../src/client/client.entity';
+import { Contact } from '../src/client/entities/contact.entity';
 
 
-describe('ClientController (e2e)', () => {
+describe('ContactController (e2e)', () => {
   let app: INestApplication;
   let createdClientId: number;
-  let superClient: Client
+  let superClient: Contact
 
   beforeAll(async () => {
     dt.config({ path: '.env' });
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule, ClientModule],
+      imports: [AppModule, ContactModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();

@@ -1,8 +1,8 @@
-import { ClientDto } from '../../dto/client.dto';
+import { ContactDto } from './contact.dto';
 
-export class ClientVerificationHistoryDto {
+export class ContactVerificationHistoryDto {
   id: number;
-  client: ClientDto;
+  client: ContactDto;
   type: 'match' | 'warning' | 'sanction' | 'fitness' | 'pep' | 'adverse';
   label: string;
   value: string;
