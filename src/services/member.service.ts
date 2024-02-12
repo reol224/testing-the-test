@@ -19,13 +19,25 @@ export class MemberService {
   ) {}
 
   async add(contactId: number, memberDtos: MemberDto | MemberDto[]): Promise<MemberDto[]> {
-    const contact = await this.contactRepository.findOneBy({id: contactId});
+    const contacts = await this.contactRepository.find({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        type: true,
+      },
+      where: { id: contactId },
+      relations: ['members'],
+    });
 
-    if (!contact) {
+    if (!contacts || contacts.length === 0) {
       throw new NotFoundException(`Contact with ID ${contactId} not found`);
     }
 
-    if(!contact.members){
+    const contact = contacts[0];
+
+    if (!contact.members) {
       contact.members = [];
     }
 
