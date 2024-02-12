@@ -67,7 +67,7 @@ export class MemberService {
       phone: member.phone,
     }));
   }
-  async createMember(memberDto: MemberDto, contactId: number): Promise<Member> {
+  async create(memberDto: MemberDto, contactId: number): Promise<Member> {
     const contact = { id: contactId };
 
     const newMember = this.memberRepository.create({
@@ -78,13 +78,13 @@ export class MemberService {
     return await this.memberRepository.save(newMember);
   }
 
-  async getMembersByContactId(contactId: number): Promise<Member[]> {
+  async getByContactId(contactId: number): Promise<Member[]> {
     return await this.memberRepository.find({
       where: { contact: { id: contactId } },
     });
   }
 
-  async getMemberById(memberId: number): Promise<Member | null> {
+  async getById(memberId: number): Promise<Member | null> {
     try {
       return await this.memberRepository.findOneBy({ id: memberId });
     } catch (error) {
@@ -92,7 +92,7 @@ export class MemberService {
     }
   }
 
-  async updateMember(memberId: number, memberDto: MemberDto): Promise<Member> {
+  async update(memberId: number, memberDto: MemberDto): Promise<Member> {
     const existingMember = await this.memberRepository.findOneBy({ id: memberId });
 
     if (!existingMember) {
@@ -107,7 +107,7 @@ export class MemberService {
     return this.memberRepository.save(updatedMember);
   }
 
-  async deleteMember(memberId: number): Promise<void> {
+  async delete(memberId: number): Promise<void> {
     const memberToRemove = await this.memberRepository.findOneBy({ id: memberId });
 
     if (!memberToRemove) {

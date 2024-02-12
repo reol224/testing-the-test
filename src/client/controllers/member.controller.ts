@@ -1,4 +1,4 @@
-import { Body, Controller, NotAcceptableException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, NotAcceptableException, Param, Post } from '@nestjs/common';
 import { ContactService } from '../../services/contact.service';
 import { MemberDto } from '../dtos/member.dto';
 import { ContactDto } from '../dtos/contact.dto';
@@ -25,5 +25,10 @@ export class MemberController {
       console.error(error);
       throw new NotAcceptableException("Members couldn't be added to the contact");
     }
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: number): Promise<void> {
+    await this.memberService.delete(id);
   }
 }
