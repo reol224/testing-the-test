@@ -16,6 +16,7 @@ import { VerificationHistory } from './verification_history.entity';
 import { RequirementDto } from '../dtos/requirement.dto';
 import { ContactVerificationHistoryDto } from '../dtos/contact_verification_history.dto';
 import { ContactIdentity } from './contact_identity.entity';
+import { Member } from './member.entity';
 
 @Entity()
 export class Contact {
@@ -163,9 +164,9 @@ export class Contact {
   @OneToMany(() => Fintrac, (fintrac) => fintrac.client, { nullable: true })
   fintracs?: Fintrac[];
 
-  @ManyToMany(() => Contact)
+  @ManyToMany(() => Member, (member) => member.id, {nullable: true, cascade: true})
   @JoinTable()
-  members: Contact[];
+  members: ({ phone: string; name: string; email: string})[];
 
   @OneToMany(() => VerificationHistory, (history) => history.client, {
     nullable: true,

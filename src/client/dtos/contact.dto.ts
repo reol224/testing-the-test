@@ -3,6 +3,7 @@ import { ContractDto } from './contract.dto';
 import { FintracDto } from './fintrac.dto';
 import { ContactVerificationHistoryDto } from './contact_verification_history.dto';
 import { ContactIdentityDto } from './contact_identity.dto';
+import { MemberDto } from './member.dto';
 
 export class ContactDto {
   name!: string;
@@ -52,6 +53,6 @@ export class ContactDto {
   requirements?: RequirementDto[];
   contracts?: ContractDto[];
   fintracs?: FintracDto[];
-  members?: ContactDto[];
+  members?: MemberDto[];
   verification_history?: ContactVerificationHistoryDto[];
 }

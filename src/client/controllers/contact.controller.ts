@@ -11,9 +11,9 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ContactService } from '../services/contact.service';
-import { Contact } from './entities/contact.entity';
-import { ContactDto } from './dtos/contact.dto';
+import { ContactService } from '../../services/contact.service';
+import { Contact } from '../entities/contact.entity';
+import { ContactDto } from '../dtos/contact.dto';
 
 @Controller('contact')
 export class ContactController {
@@ -25,7 +25,7 @@ export class ContactController {
   }
 
   @Get(':id')
-  async findOneById(@Param('id') id: number): Promise<Contact | null> {
+  async findOneById(@Param('id') id: number): Promise<Contact[]> {
     const client = await this.clientService.findOneById(id);
 
     if (!client) {
@@ -40,7 +40,7 @@ export class ContactController {
   @Post()
   async add(@Body() createClientDto: ContactDto): Promise<Contact> {
     try {
-      return await this.clientService.createClient(createClientDto);
+      return await this.clientService.create(createClientDto);
     } catch (error) {
       console.log(error);
       throw new NotAcceptableException("Client couldn't be created");

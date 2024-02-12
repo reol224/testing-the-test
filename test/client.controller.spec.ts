@@ -1,6 +1,6 @@
 // client.controller.spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
-import { ContactController } from '../src/client/contact.controller';
+import { ContactController } from '../src/client/controllers/contact.controller';
 import { ContactService } from '../src/services/contact.service';
 import { ContactDto } from '../src/client/dtos/contact.dto';
 import { Contact } from '../src/client/entities/contact.entity';
@@ -110,7 +110,7 @@ describe('ClientController', () => {
       const result = await controller.add(createClientDto);
 
       // Assert that the createClient method was called with the correct arguments
-      expect(service.createClient).toHaveBeenCalledWith(createClientDto);
+      expect(service.create).toHaveBeenCalledWith(createClientDto);
 
       // Assert that the result matches the expected createdClient
       expect(result).toEqual(createdClient);

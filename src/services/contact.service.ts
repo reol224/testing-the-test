@@ -19,30 +19,28 @@ import { FintracDto } from '../client/dtos/fintrac.dto';
 import { Fintrac } from '../client/entities/fintrac.entity';
 import { VerificationHistory } from '../client/entities/verification_history.entity';
 import { ContactVerificationHistoryDto } from '../client/dtos/contact_verification_history.dto';
+import { MemberDto } from '../client/dtos/member.dto';
+import { Member } from '../client/entities/member.entity';
 
 @Injectable()
 export class ContactService {
   constructor(
     @InjectRepository(Contact)
-    private readonly clientRepository: Repository<Contact>,
-
+    private readonly contactRepository: Repository<Contact>,
     @InjectRepository(ContactIdentity)
-    private readonly clientIdentityRepository: Repository<ContactIdentityDto>,
-
+    private readonly contactIdentityRepository: Repository<ContactIdentityDto>,
     @InjectRepository(RequirementEntity)
     private readonly requirementRepository: Repository<RequirementDto>,
-
     @InjectRepository(Contract)
     private readonly contractRepository: Repository<ContractDto>,
-
     @InjectRepository(VerificationHistory)
-    private readonly clientVerificationHistoryRepository: Repository<ContactVerificationHistoryDto>,
-
+    private readonly contactVerificationHistoryRepository: Repository<ContactVerificationHistoryDto>,
     @InjectRepository(Fintrac)
     private readonly fintracRepository: Repository<FintracDto>,
-  ) {}
+  ) {
+  }
 
-  async createClient(createClientDto: ContactDto): Promise<Contact> {
+  async create(createClientDto: ContactDto): Promise<Contact> {
     const {
       type,
       verified,
@@ -55,7 +53,7 @@ export class ContactService {
       ...data
     } = createClientDto;
 
-    const client = this.clientRepository.create({
+    const contact = this.contactRepository.create({
       name: data.name,
       email: data.email,
       phone: data.phone,
@@ -84,7 +82,7 @@ export class ContactService {
       avatar: data.avatar,
 
       client_identity: data.client_identity
-        ? this.clientIdentityRepository.create(data.client_identity)
+        ? this.contactIdentityRepository.create(data.client_identity)
         : undefined,
 
       //verification: data.verification ? this.clientRepository.create(data.verification) : undefined,
@@ -95,7 +93,7 @@ export class ContactService {
       verification_history: verification_history ?? [],
     });
 
-    return this.clientRepository.save(client);
+    return this.contactRepository.save(contact);
   }
 
   async createGroup(createGroupDto: ContactDto): Promise<Contact> {
@@ -110,7 +108,7 @@ export class ContactService {
       ...groupData
     } = createGroupDto;
 
-    const group = this.clientRepository.create({
+    const group = this.contactRepository.create({
       name: groupData.name,
       type: groupData.type,
       email: groupData.email,
@@ -137,10 +135,10 @@ export class ContactService {
       completed_percent: groupData.completed_percent,
       avatar_image_id: groupData.avatar_image_id,
       client_identity: client_identity
-        ? this.clientIdentityRepository.create(client_identity)
+        ? this.contactIdentityRepository.create(client_identity)
         : undefined,
       verification: verification
-        ? this.clientIdentityRepository.create(verification)
+        ? this.contactIdentityRepository.create(verification)
         : undefined,
       requirements: requirements
         ? requirements.map((req) => this.requirementRepository.create(req))
@@ -154,20 +152,20 @@ export class ContactService {
       members: [],
       verification_history: verification_history
         ? verification_history.map((history) =>
-            this.clientVerificationHistoryRepository.create(history),
-          )
+          this.contactVerificationHistoryRepository.create(history),
+        )
         : [],
     });
 
     if (members && members.length > 0) {
       for (const memberDto of members) {
-        const member = this.clientRepository.create(memberDto);
-        const savedMember = await this.clientRepository.save(member);
+        const member = this.contactRepository.create(memberDto);
+        const savedMember = await this.contactRepository.save(member);
         group.members.push(savedMember);
       }
     }
 
-    return await this.clientRepository.save(group);
+    return await this.contactRepository.save(group);
   }
 
   async createOrg(createOrgDto: ContactDto): Promise<Contact> {
@@ -177,19 +175,40 @@ export class ContactService {
   }
 
   async getClients(): Promise<Contact[]> {
-    return await this.clientRepository.find();
+    return await this.contactRepository.find(
+      {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          type: true,
+        },
+        relations: ['members'],
+      }
+    );
   }
 
-  async findOneById(id: number): Promise<Contact | null> {
+  async findOneById(id: number): Promise<Contact[]> {
     try {
-      return await this.clientRepository.findOneBy({ id: id });
+      return await this.contactRepository.find({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          type: true,
+        },
+        where: { id: id },
+        relations: ['members'],
+      });
     } catch (error) {
-      return null;
+      return [];
     }
   }
 
   async remove(id: number): Promise<void> {
-    const clientToRemove = await this.clientRepository.findOneBy({ id: id });
+    const clientToRemove = await this.contactRepository.findOneBy({ id: id });
 
     if (!clientToRemove) {
       throw new HttpException(
@@ -197,7 +216,7 @@ export class ContactService {
         HttpStatus.NOT_FOUND,
       );
     } else {
-      await this.clientRepository.remove(clientToRemove);
+      await this.contactRepository.remove(clientToRemove);
     }
   }
 
@@ -205,17 +224,17 @@ export class ContactService {
     id: number,
     updateClientDto: ContactDto,
   ): Promise<Contact> {
-    const existingClient = await this.clientRepository.findOneBy({ id: id });
+    const existingClient = await this.contactRepository.findOneBy({ id: id });
 
     if (!existingClient) {
       throw new NotFoundException(`Client with ID ${id} not found`);
     }
 
-    const updatedClient = this.clientRepository.merge(
+    const updatedClient = this.contactRepository.merge(
       existingClient,
       updateClientDto as Contact,
     );
 
-    return this.clientRepository.save(updatedClient);
+    return this.contactRepository.save(updatedClient);
   }
 }
