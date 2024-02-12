@@ -21,7 +21,7 @@ import { MemberService } from '../services/member.service';
       Contract,
       VerificationHistory,
       Fintrac,
-      Member
+      Member,
     ]),
   ],
   controllers: [ContactController, MemberController],

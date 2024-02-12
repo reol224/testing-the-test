@@ -1,12 +1,9 @@
-// member.service.ts
-
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Member } from '../client/entities/member.entity';
 import { MemberDto } from '../client/dtos/member.dto';
 import { Contact } from '../client/entities/contact.entity';
-
 
 @Injectable()
 export class MemberService {
@@ -15,10 +12,13 @@ export class MemberService {
     private readonly memberRepository: Repository<Member>,
 
     @InjectRepository(Contact)
-    private readonly contactRepository: Repository<Contact>
+    private readonly contactRepository: Repository<Contact>,
   ) {}
 
-  async add(contactId: number, memberDtos: MemberDto | MemberDto[]): Promise<MemberDto[]> {
+  async add(
+    contactId: number,
+    memberDtos: MemberDto | MemberDto[],
+  ): Promise<MemberDto[]> {
     const contacts = await this.contactRepository.find({
       select: {
         id: true,
@@ -41,7 +41,9 @@ export class MemberService {
       contact.members = [];
     }
 
-    const memberDtosArray = Array.isArray(memberDtos) ? memberDtos : [memberDtos];
+    const memberDtosArray = Array.isArray(memberDtos)
+      ? memberDtos
+      : [memberDtos];
 
     const newMembers: Member[] = [];
 
@@ -93,7 +95,9 @@ export class MemberService {
   }
 
   async update(memberId: number, memberDto: MemberDto): Promise<Member> {
-    const existingMember = await this.memberRepository.findOneBy({ id: memberId });
+    const existingMember = await this.memberRepository.findOneBy({
+      id: memberId,
+    });
 
     if (!existingMember) {
       throw new NotFoundException(`Member with ID ${memberId} not found`);
@@ -108,7 +112,9 @@ export class MemberService {
   }
 
   async delete(memberId: number): Promise<void> {
-    const memberToRemove = await this.memberRepository.findOneBy({ id: memberId });
+    const memberToRemove = await this.memberRepository.findOneBy({
+      id: memberId,
+    });
 
     if (!memberToRemove) {
       throw new NotFoundException(`Member with ID ${memberId} not found`);

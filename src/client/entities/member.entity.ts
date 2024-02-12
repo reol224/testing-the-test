@@ -1,5 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
-import { IsNotEmpty, IsEmail, IsPhoneNumber, IsString } from 'class-validator';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
 import { Contact } from './contact.entity';
 
 @Entity()

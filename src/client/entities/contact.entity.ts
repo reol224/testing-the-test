@@ -1,4 +1,3 @@
-// contact.entity.ts
 import {
   Column,
   Entity,
@@ -164,9 +163,12 @@ export class Contact {
   @OneToMany(() => Fintrac, (fintrac) => fintrac.client, { nullable: true })
   fintracs?: Fintrac[];
 
-  @ManyToMany(() => Member, (member) => member.id, {nullable: true, cascade: true})
+  @ManyToMany(() => Member, (member) => member.id, {
+    nullable: true,
+    cascade: true,
+  })
   @JoinTable()
-  members: ({ phone: string; name: string; email: string})[];
+  members: { phone: string; name: string; email: string }[];
 
   @OneToMany(() => VerificationHistory, (history) => history.client, {
     nullable: true,

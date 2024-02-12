@@ -1,4 +1,3 @@
-// contact.service.ts
 import {
   HttpException,
   HttpStatus,
@@ -19,8 +18,6 @@ import { FintracDto } from '../client/dtos/fintrac.dto';
 import { Fintrac } from '../client/entities/fintrac.entity';
 import { VerificationHistory } from '../client/entities/verification_history.entity';
 import { ContactVerificationHistoryDto } from '../client/dtos/contact_verification_history.dto';
-import { MemberDto } from '../client/dtos/member.dto';
-import { Member } from '../client/entities/member.entity';
 
 @Injectable()
 export class ContactService {
@@ -37,8 +34,7 @@ export class ContactService {
     private readonly contactVerificationHistoryRepository: Repository<ContactVerificationHistoryDto>,
     @InjectRepository(Fintrac)
     private readonly fintracRepository: Repository<FintracDto>,
-  ) {
-  }
+  ) {}
 
   async create(createClientDto: ContactDto): Promise<Contact> {
     const {
@@ -152,8 +148,8 @@ export class ContactService {
       members: [],
       verification_history: verification_history
         ? verification_history.map((history) =>
-          this.contactVerificationHistoryRepository.create(history),
-        )
+            this.contactVerificationHistoryRepository.create(history),
+          )
         : [],
     });
 
@@ -175,18 +171,16 @@ export class ContactService {
   }
 
   async getClients(): Promise<Contact[]> {
-    return await this.contactRepository.find(
-      {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-          type: true,
-        },
-        relations: ['members'],
-      }
-    );
+    return await this.contactRepository.find({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        type: true,
+      },
+      relations: ['members'],
+    });
   }
 
   async findOneById(id: number): Promise<Contact[]> {
