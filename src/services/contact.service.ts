@@ -30,9 +30,8 @@ export class ContactService {
       const createdMembers = [];
 
       for (const memberDto of members) {
-        memberDto.parent_contact_id = contact.id;
-        memberDto.child_contact_id = contact.id;
-        memberDto.created_at = new Date();
+        memberDto.parent_contact = { id:contact.id };
+        memberDto.child_contact = { id:contact.id };
 
         const member = this.memberRepository.create(memberDto);
         const savedMember = await this.memberRepository.save(member);
@@ -44,34 +43,6 @@ export class ContactService {
 
     return this.contactRepository.save(contact);
   }
-
-  // async createGroup(createGroupDto: ContactDto): Promise<Contact> {
-  //   const {
-  //     members,
-  //     ...groupData
-  //   } = createGroupDto;
-  //
-  //   const group = this.contactRepository.create({
-  //     groupData,
-  //     members: []
-  //   });
-  //
-  //   if (members && members.length > 0) {
-  //     for (const memberDto of members) {
-  //       const member = this.contactRepository.create(memberDto);
-  //       const savedMember = await this.contactRepository.save(member);
-  //       group.members.push(savedMember);
-  //     }
-  //   }
-  //
-  //   return await this.contactRepository.save(group);
-  // }
-  //
-  // async createOrg(createOrgDto: ContactDto): Promise<Contact> {
-  //   const orgDto: ContactDto = { ...createOrgDto, type: 'organization' };
-  //
-  //   return await this.createGroup(orgDto);
-  // }
 
   async getClients(): Promise<Contact[]> {
     return await this.contactRepository.find({

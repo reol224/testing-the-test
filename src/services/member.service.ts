@@ -50,7 +50,7 @@ export class MemberService {
     for (const memberDto of memberDtosArray) {
       const newMember = this.memberRepository.create({
         ...memberDto,
-        parent_contact_id: contactId,
+        parent_contact: { id: contactId },
       });
 
       const savedMember = await this.memberRepository.save(newMember);
@@ -62,9 +62,8 @@ export class MemberService {
     await this.contactRepository.save(contact);
 
     return newMembers.map((member) => ({
-      parent_contact_id: member.parent_contact_id,
-      child_contact_id: member.child_contact_id,
-      created_at: member.created_at,
+      parent_contact: { id: contactId },
+      child_contact: member.child_contact
     }));
   }
   async create(memberDto: MemberDto, contactId: number): Promise<MemberDto> {
@@ -77,8 +76,8 @@ export class MemberService {
     const savedMember = await this.memberRepository.save(newMember);
 
     return {
-      parent_contact_id: savedMember.parent_contact_id,
-      child_contact_id: savedMember.child_contact_id,
+      parent_contact: savedMember.parent_contact,
+      child_contact: savedMember.child_contact,
       created_at: savedMember.created_at,
     };
   }
@@ -91,8 +90,8 @@ export class MemberService {
       .getMany();
 
     return members.map((member) => ({
-      parent_contact_id: member.parent_contact_id,
-      child_contact_id: member.child_contact_id,
+      parent_contact: member.parent_contact,
+      child_contact: member.child_contact,
       created_at: member.created_at,
     }));
   }

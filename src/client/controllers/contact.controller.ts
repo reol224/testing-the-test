@@ -14,6 +14,7 @@ import {
 import { ContactService } from '../../services/contact.service';
 import { Contact } from '../entities/contact.entity';
 import { ContactDto } from '../dtos/contact.dto';
+import { TypedBody, TypedRoute } from '@nestia/core';
 
 @Controller('contact')
 export class ContactController {
@@ -37,8 +38,9 @@ export class ContactController {
 
     return client;
   }
-  @Post()
-  async add(@Body() createClientDto: ContactDto): Promise<Contact> {
+
+  @TypedRoute.Post()
+  async add(@TypedBody() createClientDto: ContactDto): Promise<Contact> {
     try {
       return await this.clientService.create(createClientDto);
     } catch (error) {
@@ -52,11 +54,6 @@ export class ContactController {
     createGroupDto.type = 'group';
     return await this.clientService.create(createGroupDto);
   }
-  //
-  // @Post('/org')
-  // async addOrg(@Body() createOrgDto: ContactDto): Promise<Contact> {
-  //   return await this.clientService.createOrg(createOrgDto);
-  // }
 
   @Patch(':id')
   async update(
