@@ -10,10 +10,10 @@ export class ContractService {
   constructor(
     @InjectRepository(Contract)
     private readonly contractRepository: Repository<Contract>,
-
     @InjectRepository(Contact)
     private readonly contactRepository: Repository<Contact>,
-  ) {}
+  ) {
+  }
 
   async add(contactId: number, contractDto: ContractDto): Promise<ContractDto> {
     const contact = await this.contactRepository.findOne({
@@ -25,7 +25,7 @@ export class ContractService {
         type: true,
       },
       where: { id: contactId },
-      relations: ['contract'], 
+      relations: ['contract'],
     });
 
     if (!contact) {
@@ -54,9 +54,10 @@ export class ContractService {
       status: savedContract.status,
     };
   }
+
   async delete(contractId: number): Promise<void> {
     const contractToRemove = await this.contractRepository.findOneBy({
-      id:contractId,
+      id: contractId,
     });
 
     if (!contractToRemove) {
@@ -64,5 +65,31 @@ export class ContractService {
     }
 
     await this.contractRepository.remove(contractToRemove);
+  }
+
+  async update(contractId: number, contractDto: ContractDto): Promise<void> {
+    const contract = await this.contractRepository.findOneBy({
+      id: contractId,
+    });
+
+    if (!contract) {
+      throw new NotFoundException(`No contract with that ID`);
+    }
+
+    contract.label = contractDto.label;
+    contract.commence_date = contractDto.commence_date;
+    contract.expire_date = contractDto.expire_date;
+    contract.type = contractDto.type;
+    contract.status = contractDto.status;
+
+    await this.contractRepository.save(contract);
+  }
+
+  async getById(id: number) {
+    return await this.contractRepository.findOneBy({ id });
+  }
+
+  async getAll() {
+    return await this.contractRepository.find();
   }
 }
