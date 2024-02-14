@@ -1,15 +1,5 @@
-import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
-
 export class MemberDto {
-  @IsNotEmpty()
-  @IsString()
-  name!: string;
-
-  @IsNotEmpty()
-  @IsEmail()
-  email!: string;
-
-  @IsNotEmpty()
-  @IsPhoneNumber()
-  phone!: string;
+  parent_contact_id!: number;
+  child_contact_id!: number;
+  created_at?: Date;
 }

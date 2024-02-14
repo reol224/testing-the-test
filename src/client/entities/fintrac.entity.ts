@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Contact } from './contact.entity';
 
 @Entity()
@@ -12,78 +6,49 @@ export class Fintrac {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Contact, (client) => client.fintracs)
-  @JoinColumn({ name: 'client_id' })
-  client: Contact;
-
-  @Column({ name: 'client_requirement_id' })
-  client_requirement_id: number;
-
-  @Column({
-    type: 'enum',
-    enum: ['individual', 'organization', 'group'],
-    nullable: true,
-    default: 'individual',
-  })
-  type: 'individual' | 'organization' | 'group';
+  @ManyToOne(() => Contact, (contact) => contact.fintracs, { nullable: true })
+  @JoinColumn({ name: 'contact_id' })
+  contact: Contact;
 
   @Column({ nullable: true })
-  property_address: string;
+  purpose?: string;
 
   @Column({ nullable: true })
-  corporation_legal_name: string;
+  purpose_notes?: string;
 
   @Column({ nullable: true })
-  director_names: string;
+  purpose_other?: string;
 
   @Column({ nullable: true })
-  type_of_verification: string;
+  third_party?: boolean;
 
   @Column({ nullable: true })
-  other_entity_name: string;
+  tp_relationship?: string;
 
   @Column({ nullable: true })
-  unrepresented: boolean;
+  tp_reason?: string;
 
   @Column({ nullable: true })
-  measure_taken_other: string;
+  tp_name?: string;
 
   @Column({ nullable: true })
-  measure_unsuccessful_other: string;
+  tp_address?: string;
 
   @Column({ nullable: true })
-  third_party_transaction: boolean;
+  tp_occupation?: string;
 
   @Column({ nullable: true })
-  third_party_reason: string;
+  tp_corp_number?: string;
 
   @Column({ nullable: true })
-  third_party_name: string;
+  tp_jurisdiction?: string;
 
   @Column({ nullable: true })
-  pep_checked_at: Date;
-
-  @Column({
-    type: 'enum',
-    enum: ['asked', 'internet', 'consult', 'other'],
-  })
-  pep_method: 'asked' | 'internet' | 'consult' | 'other';
+  tp_dob?: string;
 
   @Column({ nullable: true })
-  pep_method_other: string;
-
-  @Column({
-    type: 'enum',
-    enum: ['foreign', 'domestic', 'hio', 'none'],
-  })
-  pep_result: 'foreign' | 'domestic' | 'hio' | 'none';
-
-  @Column({
-    type: 'enum',
-    enum: ['valid', 'expired'],
-  })
-  status: 'valid' | 'expired';
+  pep_flagged?: boolean;
 
   @Column({ nullable: true })
-  document_id: number;
+  pep_description?: string;
 }

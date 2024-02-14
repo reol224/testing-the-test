@@ -49,10 +49,8 @@ export class MemberService {
 
     for (const memberDto of memberDtosArray) {
       const newMember = this.memberRepository.create({
-        name: memberDto.name,
-        email: memberDto.email,
-        phone: memberDto.phone,
-        contact: contact,
+        ...memberDto,
+        parent_contact_id: contactId,
       });
 
       const savedMember = await this.memberRepository.save(newMember);
@@ -64,26 +62,39 @@ export class MemberService {
     await this.contactRepository.save(contact);
 
     return newMembers.map((member) => ({
-      name: member.name,
-      email: member.email,
-      phone: member.phone,
+      parent_contact_id: member.parent_contact_id,
+      child_contact_id: member.child_contact_id,
+      created_at: member.created_at,
     }));
   }
-  async create(memberDto: MemberDto, contactId: number): Promise<Member> {
+  async create(memberDto: MemberDto, contactId: number): Promise<MemberDto> {
     const contact = { id: contactId };
 
     const newMember = this.memberRepository.create({
       ...memberDto,
-      contact: contact,
     });
 
-    return await this.memberRepository.save(newMember);
+    const savedMember = await this.memberRepository.save(newMember);
+
+    return {
+      parent_contact_id: savedMember.parent_contact_id,
+      child_contact_id: savedMember.child_contact_id,
+      created_at: savedMember.created_at,
+    };
   }
 
-  async getByContactId(contactId: number): Promise<Member[]> {
-    return await this.memberRepository.find({
-      where: { contact: { id: contactId } },
-    });
+  async getByContactId(contactId: number): Promise<MemberDto[]> {
+    const members = await this.memberRepository
+      .createQueryBuilder('member')
+      .where('member.parent_contact_id = :contactId OR member.child_contact_id = :contactId', { contactId })
+      .select(['member.parent_contact_id', 'member.child_contact_id', 'member.created_at'])
+      .getMany();
+
+    return members.map((member) => ({
+      parent_contact_id: member.parent_contact_id,
+      child_contact_id: member.child_contact_id,
+      created_at: member.created_at,
+    }));
   }
 
   async getById(memberId: number): Promise<Member | null> {

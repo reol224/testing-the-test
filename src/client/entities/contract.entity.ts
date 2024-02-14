@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Contact } from './contact.entity';
 
 @Entity()
@@ -12,12 +6,33 @@ export class Contract {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Contact, (client) => client.contracts)
-  @JoinColumn({ name: 'client_id' })
-  client: Contact;
+  @OneToOne(() => Contact, (contact) => contact.contract)
+  @JoinColumn({ name: 'contact_id' })
+  contact: Contact;
 
-  @Column({ name: 'client_requirement_id' })
-  client_requirement_id: number;
+  @Column({ nullable: true })
+  label?: string;
+
+  @Column({ type: 'date', nullable: true })
+  commence_date?: Date;
+
+  @Column({ type: 'date', nullable: true })
+  expire_date?: Date;
+
+  @Column({ nullable: true })
+  holdover_days?: number;
+
+  @Column({ nullable: true })
+  location_area?: string;
+
+  @Column({ nullable: true })
+  property_description?: string;
+
+  @Column({nullable: true})
+  commission?: string;
+
+  @Column({ nullable: true })
+  commission_notes?: string;
 
   @Column({
     type: 'enum',
@@ -25,33 +40,21 @@ export class Contract {
   })
   type: 'buyer' | 'seller';
 
-  @Column({ nullable: true })
-  property_address: string;
-
-  @Column({ nullable: true })
-  commencing_at: Date;
-
-  @Column({ nullable: true })
-  expire_at: Date;
-
-  @Column({ nullable: true })
-  selling_price: string;
-
-  @Column({ nullable: true })
-  selling_exclusive: boolean;
-
-  @Column({ nullable: true })
-  total_commission: string;
-
-  @Column({ nullable: true })
-  buyer_commission: string;
-
   @Column({
     type: 'enum',
-    enum: ['sent', 'active', 'expired'],
+    enum: ['active', 'expired', 'archived'],
   })
-  status: 'sent' | 'active' | 'expired';
+  status: 'active' | 'expired' | 'archived';
 
   @Column({ nullable: true })
-  document_id: number;
+  listing_price?: string;
+
+  @Column({ nullable: true })
+  solicitation?: boolean;
+
+  @Column({ nullable: true })
+  coop_commission?: string;
+
+  @Column({ nullable: true })
+  coop_com_notes?: string;
 }

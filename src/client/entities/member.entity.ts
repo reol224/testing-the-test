@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Contact } from './contact.entity';
 
 @Entity()
@@ -13,22 +6,14 @@ export class Member {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  @IsNotEmpty()
-  @IsString()
-  name: string;
+  @ManyToOne(() => Contact, (contact) => contact.members)
+  @JoinColumn({ name: 'contact_id' })
+  parent_contact_id!: number;
 
-  @Column()
-  @IsNotEmpty()
-  @IsEmail()
-  email: string;
+  @ManyToOne(() => Contact, (contact) => contact.members)
+  child_contact_id!: number;
 
-  @Column()
-  @IsNotEmpty()
-  @IsPhoneNumber()
-  phone: string;
+  @Column({ nullable: true })
+  created_at?: Date;
 
-  @ManyToMany(() => Contact, (contact) => contact.members)
-  @JoinTable()
-  contact: Contact;
 }

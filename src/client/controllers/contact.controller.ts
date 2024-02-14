@@ -50,13 +50,13 @@ export class ContactController {
   @Post('/group')
   async addGroup(@Body() createGroupDto: ContactDto): Promise<Contact> {
     createGroupDto.type = 'group';
-    return await this.clientService.createGroup(createGroupDto);
+    return await this.clientService.create(createGroupDto);
   }
-
-  @Post('/org')
-  async addOrg(@Body() createOrgDto: ContactDto): Promise<Contact> {
-    return await this.clientService.createOrg(createOrgDto);
-  }
+  //
+  // @Post('/org')
+  // async addOrg(@Body() createOrgDto: ContactDto): Promise<Contact> {
+  //   return await this.clientService.createOrg(createOrgDto);
+  // }
 
   @Patch(':id')
   async update(

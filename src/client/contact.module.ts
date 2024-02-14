@@ -3,25 +3,33 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Contact } from './entities/contact.entity';
 import { ContactController } from './controllers/contact.controller';
 import { ContactService } from '../services/contact.service';
-import { ContactIdentity } from './entities/contact_identity.entity';
-import { RequirementEntity } from './entities/requirement.entity';
+import { Identity } from './entities/identity.entity';
 import { Contract } from './entities/contract.entity';
-import { VerificationHistory } from './entities/verification_history.entity';
 import { Fintrac } from './entities/fintrac.entity';
 import { Member } from './entities/member.entity';
 import { MemberController } from './controllers/member.controller';
 import { MemberService } from '../services/member.service';
+import { FintracRisk } from './entities/fintrac_risk.entity';
+import { FintracVerification } from './entities/fintrac_verification.entity';
+import { Profile } from './entities/profile.entity';
+import { Verification } from './entities/verification.entity';
+import { VerificationHits } from './entities/verification_hits.entity';
+import { VerificationRequest } from './entities/verification_request.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       Contact,
-      ContactIdentity,
-      RequirementEntity,
+      Identity,
       Contract,
-      VerificationHistory,
+      Verification,
+      VerificationHits,
+      VerificationRequest,
       Fintrac,
+      FintracRisk,
+      FintracVerification,
       Member,
+      Profile
     ]),
   ],
   controllers: [ContactController, MemberController],

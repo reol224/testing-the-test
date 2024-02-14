@@ -1,9 +1,13 @@
-import { RequirementDto } from './requirement.dto';
 import { ContractDto } from './contract.dto';
 import { FintracDto } from './fintrac.dto';
-import { ContactVerificationHistoryDto } from './contact_verification_history.dto';
-import { ContactIdentityDto } from './contact_identity.dto';
+import { IdentityDto } from './identity.dto';
 import { MemberDto } from './member.dto';
+import { VerificationDto } from './verification.dto';
+import { ProfileDto } from './profile.dto';
+import { VerificationRequestDto } from './verification_request.dto';
+import { VerificationHitsDto } from './verification_hits.dto';
+import { FintracRiskDto } from './fintrac_risk.dto';
+import { FintracVerificationDto } from './fintrac_verification.dto';
 
 export class ContactDto {
   name!: string;
@@ -12,47 +16,30 @@ export class ContactDto {
   address?: string;
   city?: string;
   province?: string;
-  postal_code?: string;
+  postal?: string;
   country?: string;
-  employment_type?:
-    | 'employed'
-    | 'self-employed'
-    | 'part time'
-    | 'contract'
-    | 'retired'
-    | 'other';
-  employer_name?: string;
-  industry?: string;
-  position?: string;
-  corporation_number?: string;
-  operating_as?: string;
-  corp_jurisdiction?: string;
-  principal_business?: string;
-  type!: 'individual' | 'organization' | 'group';
-  verified!: boolean;
-  verified_method!: 'remote' | 'government_id' | 'credit' | 'other';
-  status!: 'verified' | 'rejected' | 'manually_verified' | 'missing';
-  partner_relationship?: 'spouse' | 'cosigner';
-  employment_status?:
-    | 'fulltime'
-    | 'selfemployed'
-    | 'parttime'
-    | 'contract'
-    | 'retired'
-    | 'other';
-  visible?: boolean;
-  completed_percent?: number;
-  avatar_image_id?: string;
-  avatar?: {
-    sm: string;
-    md: string;
-    lg: string;
-  };
-  client_identity?: ContactIdentityDto;
-  verification?: ContactDto;
-  requirements?: RequirementDto[];
-  contracts?: ContractDto[];
+  description?: string;
+  corp_number?: string;
+  corp_legal_name?: string;
+  corp_province?: string;
+  corp_country?: string;
+  type!: 'individual' | 'company' | 'group';
+  status!: 'active' | 'archived';
+  avatar_sm?: string;
+  avatar_md?: string;
+  avatar_lg?: string;
+  profile_id?: number;
+  has_completed_identity?: boolean;
+  has_active_contract?: boolean;
+  has_fintrac_score?: boolean;
+  profile?: ProfileDto;
+  identity?: IdentityDto;
+  verifications?: VerificationDto[];
+  verification_request?: VerificationRequestDto[];
+  verification_hits?: VerificationHitsDto[];
+  contract?: ContractDto;
   fintracs?: FintracDto[];
+  fintrac_risk?: FintracRiskDto;
+  fintrac_verification?: FintracVerificationDto;
   members?: MemberDto[];
-  verification_history?: ContactVerificationHistoryDto[];
 }
