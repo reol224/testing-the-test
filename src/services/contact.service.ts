@@ -53,7 +53,7 @@ export class ContactService {
         phone: true,
         type: true,
       },
-      relations: ['members'],
+      relations: ['members', 'contract'],
     });
   }
 
@@ -68,10 +68,14 @@ export class ContactService {
           type: true,
         },
         where: { id: id },
-        relations: ['members'],
+        relations: ['members', 'contract'],
       });
     } catch (error) {
-      return [];
+      console.log(error);
+      throw new HttpException(
+        `Client with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
 

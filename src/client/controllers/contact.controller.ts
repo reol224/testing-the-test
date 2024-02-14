@@ -14,7 +14,8 @@ import {
 import { ContactService } from '../../services/contact.service';
 import { Contact } from '../entities/contact.entity';
 import { ContactDto } from '../dtos/contact.dto';
-import { TypedBody, TypedRoute } from '@nestia/core';
+import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
+import { TypeGuardError } from 'typia';
 
 @Controller('contact')
 export class ContactController {
@@ -26,17 +27,17 @@ export class ContactController {
   }
 
   @Get(':id')
+  @TypedException<TypeGuardError>(404, "Contact not found")
   async findOneById(@Param('id') id: number): Promise<Contact[]> {
-    const client = await this.clientService.findOneById(id);
-
-    if (!client) {
+    try {
+      return await this.clientService.findOneById(id);
+    } catch (error) {
+      console.log(error);
       throw new HttpException(
         `Client with ID ${id} not found`,
         HttpStatus.NOT_FOUND,
       );
     }
-
-    return client;
   }
 
   @TypedRoute.Post()

@@ -15,6 +15,8 @@ import { Profile } from './entities/profile.entity';
 import { Verification } from './entities/verification.entity';
 import { VerificationHits } from './entities/verification_hits.entity';
 import { VerificationRequest } from './entities/verification_request.entity';
+import { ContractController } from './controllers/contract.controller';
+import { ContractService } from '../services/contract.service';
 
 @Module({
   imports: [
@@ -32,8 +34,8 @@ import { VerificationRequest } from './entities/verification_request.entity';
       Profile
     ]),
   ],
-  controllers: [ContactController, MemberController],
-  providers: [ContactService, MemberService],
+  controllers: [ContactController, MemberController, ContractController],
+  providers: [ContactService, MemberService, ContractService],
   exports: [ContactService],
 })
 export class ContactModule {}
