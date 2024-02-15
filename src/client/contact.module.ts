@@ -19,6 +19,10 @@ import { ContractService } from '../services/contract.service';
 import { IdentityService } from '../services/identity.service';
 import { Identity } from './entities/identity.entity';
 import { IdentityController } from './controllers/identity.controller';
+import { FintracController } from './controllers/fintrac.controller';
+import { FintracService } from '../services/fintrac.service';
+import { FintracRiskController } from './controllers/fintrac_risk.controller';
+import { FintracRiskService } from '../services/fintrac_risk.service';
 
 @Module({
   imports: [
@@ -36,8 +40,8 @@ import { IdentityController } from './controllers/identity.controller';
       Profile
     ]),
   ],
-  controllers: [ContactController, MemberController, ContractController, IdentityController],
-  providers: [ContactService, MemberService, ContractService, IdentityService],
+  controllers: [ContactController, MemberController, ContractController, IdentityController, FintracController, FintracRiskController],
+  providers: [ContactService, MemberService, ContractService, IdentityService, FintracService, FintracRiskService],
   exports: [ContactService],
 })
 export class ContactModule {}

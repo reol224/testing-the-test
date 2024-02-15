@@ -61,8 +61,9 @@ export class ContactService {
         email: true,
         phone: true,
         type: true,
+        members: true,
       },
-      relations: ['members', 'contract', 'identity'],
+      relations: ['members', 'contract', 'identity', 'fintracs', 'fintrac_risk'],
     });
   }
 
@@ -77,7 +78,7 @@ export class ContactService {
           type: true,
         },
         where: { id: id },
-        relations: ['members', 'contract', 'identity'],
+        relations: ['members', 'contract', 'identity', 'fintracs', 'fintrac_risk'],
       });
     } catch (error) {
       console.log(error);
