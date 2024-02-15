@@ -23,6 +23,8 @@ import { FintracController } from './controllers/fintrac.controller';
 import { FintracService } from '../services/fintrac.service';
 import { FintracRiskController } from './controllers/fintrac_risk.controller';
 import { FintracRiskService } from '../services/fintrac_risk.service';
+import { FintracVerificationController } from './controllers/fintrac_verification.controller';
+import { FintracVerificationService } from '../services/fintrac_verification.service';
 
 @Module({
   imports: [
@@ -47,6 +49,7 @@ import { FintracRiskService } from '../services/fintrac_risk.service';
     IdentityController,
     FintracController,
     FintracRiskController,
+    FintracVerificationController
   ],
   providers: [
     ContactService,
@@ -55,6 +58,7 @@ import { FintracRiskService } from '../services/fintrac_risk.service';
     IdentityService,
     FintracService,
     FintracRiskService,
+    FintracVerificationService
   ],
   exports: [ContactService],
 })
