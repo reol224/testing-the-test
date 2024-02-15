@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Contact } from './entities/contact.entity';
 import { ContactController } from './controllers/contact.controller';
 import { ContactService } from '../services/contact.service';
-import { Identity } from './entities/identity.entity';
 import { Contract } from './entities/contract.entity';
 import { Fintrac } from './entities/fintrac.entity';
 import { Member } from './entities/member.entity';
@@ -17,6 +16,8 @@ import { VerificationHits } from './entities/verification_hits.entity';
 import { VerificationRequest } from './entities/verification_request.entity';
 import { ContractController } from './controllers/contract.controller';
 import { ContractService } from '../services/contract.service';
+import { IdentityService } from '../services/identity.service';
+import { Identity } from './entities/identity.entity';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { ContractService } from '../services/contract.service';
     ]),
   ],
   controllers: [ContactController, MemberController, ContractController],
-  providers: [ContactService, MemberService, ContractService],
+  providers: [ContactService, MemberService, ContractService, IdentityService],
   exports: [ContactService],
 })
 export class ContactModule {}

@@ -53,7 +53,7 @@ export class ContactService {
         phone: true,
         type: true,
       },
-      relations: ['members', 'contract'],
+      relations: ['members', 'contract', 'identity'],
     });
   }
 
@@ -68,7 +68,7 @@ export class ContactService {
           type: true,
         },
         where: { id: id },
-        relations: ['members', 'contract'],
+        relations: ['members', 'contract', 'identity'],
       });
     } catch (error) {
       console.log(error);

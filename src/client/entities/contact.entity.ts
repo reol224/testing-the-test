@@ -104,7 +104,7 @@ export class Contact {
   @JoinColumn({ name: 'profile_id' })
   profile?: Profile;
 
-  @OneToOne(() => Identity, (identity) => identity.contact, { nullable: true })
+  @OneToOne(() => Identity, (identity) => identity.id, { nullable: true, cascade: true })
   @JoinColumn({ name: 'identity_id' })
   identity?: Identity;
 
@@ -120,7 +120,7 @@ export class Contact {
   @JoinColumn({ name: 'verification_hits_id' })
   verification_hits?: VerificationHits[];
 
-  @OneToOne(() => Contract, (contract) => contract.contact, { nullable: true, cascade: true })
+  @OneToOne(() => Contract, (contract) => contract.id, { nullable: true, cascade: true })
   @JoinColumn({ name: 'contract_id' })
   contract?: Contract;
 
