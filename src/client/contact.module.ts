@@ -18,6 +18,7 @@ import { ContractController } from './controllers/contract.controller';
 import { ContractService } from '../services/contract.service';
 import { IdentityService } from '../services/identity.service';
 import { Identity } from './entities/identity.entity';
+import { IdentityController } from './controllers/identity.controller';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { Identity } from './entities/identity.entity';
       Profile
     ]),
   ],
-  controllers: [ContactController, MemberController, ContractController],
+  controllers: [ContactController, MemberController, ContractController, IdentityController],
   providers: [ContactService, MemberService, ContractService, IdentityService],
   exports: [ContactService],
 })

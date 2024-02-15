@@ -16,14 +16,9 @@ import { Contact } from '../entities/contact.entity';
 import { ContactDto } from '../dtos/contact.dto';
 import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
 import { TypeGuardError } from 'typia';
-import { IdentityDto } from '../dtos/identity.dto';
-import { IdentityService } from '../../services/identity.service';
-import { Identity } from '../entities/identity.entity';
-
-
 @Controller('contact')
 export class ContactController {
-  constructor(private readonly clientService: ContactService, private readonly identityService: IdentityService) {}
+  constructor(private readonly clientService: ContactService) {}
 
   @Get()
   async get(): Promise<Contact[]> {
@@ -60,13 +55,7 @@ export class ContactController {
     return await this.clientService.create(createGroupDto);
   }
 
-  @Post('/identity/:id')
-  async addIdentity(
-    @Param('id') id: number,
-    @Body() createIdentityDto: IdentityDto
-  ): Promise<Identity> {
-    return await this.identityService.create(id,createIdentityDto);
-  }
+
 
   @Patch(':id')
   async update(
@@ -76,18 +65,7 @@ export class ContactController {
     return await this.clientService.updateClient(id, updateClientDto);
   }
 
-  @Patch('/identity/:id')
-  async updateIdentity(
-    @Param('id') id: number,
-    @Body() updateIdentityDto: IdentityDto,
-  ): Promise<Identity> {
-    return await this.identityService.update(id, updateIdentityDto);
-  }
-  
-  @Delete('/identity/:id')
-  async removeIdentity(@Param('id') id: number): Promise<void> {
-    await this.identityService.delete(id);
-  }
+
 
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {
