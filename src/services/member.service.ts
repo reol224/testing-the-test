@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Member } from '../client/entities/member.entity';
@@ -37,6 +37,10 @@ export class MemberService {
 
     const contact = contacts[0];
 
+    if (contact.type !== 'group' && contact.type !== 'company') {
+      throw new HttpException('You can only add members to groups/companies', HttpStatus.BAD_REQUEST);
+    }
+
     if (!contact.members) {
       contact.members = [];
     }
@@ -50,7 +54,8 @@ export class MemberService {
     for (const memberDto of memberDtosArray) {
       const newMember = this.memberRepository.create({
         ...memberDto,
-        parent_contact: { id: contactId },
+        parent_contact: contact,
+        created_at: new Date().toDateString(),
       });
 
       const savedMember = await this.memberRepository.save(newMember);
@@ -61,11 +66,9 @@ export class MemberService {
 
     await this.contactRepository.save(contact);
 
-    return newMembers.map((member) => ({
-      parent_contact: { id: contactId },
-      child_contact: member.child_contact
-    }));
+    return newMembers;
   }
+
   async create(memberDto: MemberDto, contactId: number): Promise<MemberDto> {
     const contact = { id: contactId };
 
@@ -73,29 +76,8 @@ export class MemberService {
       ...memberDto,
     });
 
-    const savedMember = await this.memberRepository.save(newMember);
-
-    return {
-      parent_contact: savedMember.parent_contact,
-      child_contact: savedMember.child_contact,
-      created_at: savedMember.created_at,
-    };
+    return await this.memberRepository.save(newMember);
   }
-
-  async getByContactId(contactId: number): Promise<MemberDto[]> {
-    const members = await this.memberRepository
-      .createQueryBuilder('member')
-      .where('member.parent_contact_id = :contactId OR member.child_contact_id = :contactId', { contactId })
-      .select(['member.parent_contact_id', 'member.child_contact_id', 'member.created_at'])
-      .getMany();
-
-    return members.map((member) => ({
-      parent_contact: member.parent_contact,
-      child_contact: member.child_contact,
-      created_at: member.created_at,
-    }));
-  }
-
   async getById(memberId: number): Promise<Member | null> {
     try {
       return await this.memberRepository.findOneBy({ id: memberId });

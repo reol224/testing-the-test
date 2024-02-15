@@ -6,15 +6,15 @@ export class Member {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Contact, (contact) => contact.members)
+  @ManyToOne(() => Contact, (contact) => contact.id)
   @JoinColumn({ name: 'contact_id' })
-  parent_contact!: { id: number };
+  parent_contact?: { id: number };
 
   @ManyToOne(() => Contact, (contact) => contact.members)
-  child_contact!: { id: number };
+  child_contact?: { id: number };
 
   @Column({ nullable: true})
-  @CreateDateColumn()
+  //@CreateDateColumn()
   created_at?: string;
 
 }

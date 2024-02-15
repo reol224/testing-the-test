@@ -16,7 +16,7 @@ export class ContactService {
   ) {}
 
   async create(createContactDto: ContactDto): Promise<Contact> {
-    const { name, email, phone, members, ...data } = createContactDto;
+    const { name, email, phone, members, type, ...data } = createContactDto;
 
     const contact = this.contactRepository.create({
       ...data,
@@ -24,25 +24,34 @@ export class ContactService {
       email,
       phone,
       members: [],
+      type,
     });
 
-    if (members && members.length > 0) {
-      const createdMembers = [];
+    if (contact.type === 'group' || contact.type === 'company') {
+      if (members && members.length > 0) {
+        const createdMembers = [];
 
-      for (const memberDto of members) {
-        memberDto.parent_contact = { id:contact.id };
-        memberDto.child_contact = { id:contact.id };
+        for (const memberDto of members) {
+          const member = this.memberRepository.create({
+            ...memberDto,
+            created_at: new Date().toDateString(),
+            //parent_contact: contact,
+          });
 
-        const member = this.memberRepository.create(memberDto);
-        const savedMember = await this.memberRepository.save(member);
-        createdMembers.push(savedMember);
+          const savedMember = await this.memberRepository.save(member);
+          createdMembers.push(savedMember);
+        }
+
+        contact.members = createdMembers;
       }
 
-      contact.members = createdMembers;
+      return await this.contactRepository.save(contact);
+    } else {
+      console.log('Invalid type:', contact.type);
+      throw new HttpException('You can only add members to groups/companies', HttpStatus.BAD_REQUEST);
     }
-
-    return this.contactRepository.save(contact);
   }
+
 
   async getClients(): Promise<Contact[]> {
     return await this.contactRepository.find({

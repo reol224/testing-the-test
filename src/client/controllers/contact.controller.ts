@@ -45,7 +45,7 @@ export class ContactController {
   }
 
   @TypedRoute.Post()
-  async add(@TypedBody() createClientDto: ContactDto): Promise<Contact> {
+  async add(@Body() createClientDto: ContactDto): Promise<Contact> {
     try {
       return await this.clientService.create(createClientDto);
     } catch (error) {
