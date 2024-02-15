@@ -37,10 +37,14 @@ export class FintracRiskService {
 
     const fintracRisk = this.fintracRiskRepository.create({
       ...fintracRiskDto,
-      contact: contact,
+      contact: {id: contactId},
     });
 
-    return await this.fintracRiskRepository.save(fintracRisk);
+    contact.fintrac_risk = fintracRisk;
+
+    await this.contactRepository.save(contact);
+
+    return fintracRisk;
   }
 
   async update(

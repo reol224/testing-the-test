@@ -20,7 +20,7 @@ export class Identity {
   fullname?: string;
 
   @Column()
-  first_name: string;
+  first_name?: string;
 
   @Column({ nullable: true })
   last_name?: string;

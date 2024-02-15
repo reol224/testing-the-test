@@ -37,10 +37,14 @@ export class FintracVerificationService {
 
     const fintracVerification = this.fintracVerificationRepository.create({
       ...fintracVerificationDto,
-      contact: contact,
+      contact: {id: contactId},
     });
 
-    return await this.fintracVerificationRepository.save(fintracVerification);
+    contact.fintrac_verification = fintracVerification;
+
+    await this.contactRepository.save(contact);
+
+    return fintracVerification;
   }
 
   async update(

@@ -104,7 +104,7 @@ export class Contact {
   @JoinColumn({ name: 'profile_id' })
   profile?: Profile;
 
-  @OneToOne(() => Identity, (identity) => identity.id, {
+  @OneToOne(() => Identity, (identity) => identity.contact, {
     nullable: true,
     cascade: true,
   })

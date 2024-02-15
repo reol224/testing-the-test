@@ -34,10 +34,14 @@ export class IdentityService {
 
     const identity = this.identityRepository.create({
       ...identityDto,
-      contact: contact,
+      contact: {id: contactId},
     });
 
-    return await this.identityRepository.save(identity);
+    contact.identity = identity;
+
+    await this.contactRepository.save(contact);
+
+    return identity;
   }
   async delete(identityId: number): Promise<void> {
     const identityToRemove = await this.identityRepository.findOneBy({

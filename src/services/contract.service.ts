@@ -14,7 +14,7 @@ export class ContractService {
     private readonly contactRepository: Repository<Contact>,
   ) {}
 
-  async add(contactId: number, contractDto: ContractDto): Promise<ContractDto> {
+  async add(contactId: number, contractDto: ContractDto): Promise<Contract> {
     const contact = await this.contactRepository.findOne({
       select: {
         id: true,
@@ -41,19 +41,14 @@ export class ContractService {
 
     const newContract = this.contractRepository.create({
       ...contractDto,
-      contact: contact,
+      contact: {id: contactId},
     });
 
-    const savedContract = await this.contractRepository.save(newContract);
+    contact.contract = newContract;
 
-    return {
-      contact_id: contactId,
-      label: savedContract.label,
-      commence_date: savedContract.commence_date,
-      expire_date: savedContract.expire_date,
-      type: savedContract.type,
-      status: savedContract.status,
-    };
+    await this.contactRepository.save(contact);
+
+    return newContract;
   }
 
   async delete(contractId: number): Promise<void> {
