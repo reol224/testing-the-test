@@ -1,12 +1,20 @@
-import { Body, Controller, Delete, Get, NotAcceptableException, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotAcceptableException,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ContractService } from '../../services/contract.service';
 import { ContractDto } from '../dtos/contract.dto';
 import { Contract } from '../entities/contract.entity';
 
 @Controller('contract')
 export class ContractController {
-  constructor(private readonly contractService: ContractService) {
-  }
+  constructor(private readonly contractService: ContractService) {}
 
   @Post(':id')
   async add(
@@ -18,7 +26,7 @@ export class ContractController {
     } catch (error) {
       console.error(error);
       throw new NotAcceptableException(
-        'Contract couldn\'t be added to the contact',
+        "Contract couldn't be added to the contact",
       );
     }
   }
@@ -29,9 +37,7 @@ export class ContractController {
       return await this.contractService.getAll();
     } catch (error) {
       console.error(error);
-      throw new NotAcceptableException(
-        'Contract couldn\'t be found',
-      );
+      throw new NotAcceptableException("Contract couldn't be found");
     }
   }
 
@@ -41,9 +47,7 @@ export class ContractController {
       return await this.contractService.getById(id);
     } catch (error) {
       console.error(error);
-      throw new NotAcceptableException(
-        'Contract couldn\'t be found',
-      );
+      throw new NotAcceptableException("Contract couldn't be found");
     }
   }
   @Delete(':id')
@@ -52,17 +56,12 @@ export class ContractController {
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() contractDto: ContractDto,
-  ) {
+  async update(@Param('id') id: number, @Body() contractDto: ContractDto) {
     try {
       return await this.contractService.update(id, contractDto);
     } catch (error) {
       console.error(error);
-      throw new NotAcceptableException(
-        'Contract couldn\'t be updated',
-      );
+      throw new NotAcceptableException("Contract couldn't be updated");
     }
   }
 }

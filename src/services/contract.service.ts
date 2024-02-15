@@ -12,8 +12,7 @@ export class ContractService {
     private readonly contractRepository: Repository<Contract>,
     @InjectRepository(Contact)
     private readonly contactRepository: Repository<Contact>,
-  ) {
-  }
+  ) {}
 
   async add(contactId: number, contractDto: ContractDto): Promise<ContractDto> {
     const contact = await this.contactRepository.findOne({
@@ -35,7 +34,9 @@ export class ContractService {
     const existingContract = contact.contract;
 
     if (existingContract) {
-      throw new NotFoundException(`Contact with ID ${contactId} already has a contract`);
+      throw new NotFoundException(
+        `Contact with ID ${contactId} already has a contract`,
+      );
     }
 
     const newContract = this.contractRepository.create({

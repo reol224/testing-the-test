@@ -15,7 +15,10 @@ export class FintracRiskService {
     private readonly contactRepository: Repository<Contact>,
   ) {}
 
-  async create(contactId: number, fintracRiskDto: FintracRiskDto): Promise<FintracRisk> {
+  async create(
+    contactId: number,
+    fintracRiskDto: FintracRiskDto,
+  ): Promise<FintracRisk> {
     const contact = await this.contactRepository.findOne({
       select: {
         id: true,
@@ -40,13 +43,18 @@ export class FintracRiskService {
     return await this.fintracRiskRepository.save(fintracRisk);
   }
 
-  async update(fintracRiskId: number, fintracRiskDto: FintracRiskDto): Promise<FintracRisk> {
+  async update(
+    fintracRiskId: number,
+    fintracRiskDto: FintracRiskDto,
+  ): Promise<FintracRisk> {
     const existingFintracRisk = await this.fintracRiskRepository.findOneBy({
       id: fintracRiskId,
     });
 
     if (!existingFintracRisk) {
-      throw new NotFoundException(`Fintrac risk with ID ${fintracRiskId} not found`);
+      throw new NotFoundException(
+        `Fintrac risk with ID ${fintracRiskId} not found`,
+      );
     }
 
     const updatedFintracRisk = this.fintracRiskRepository.merge(

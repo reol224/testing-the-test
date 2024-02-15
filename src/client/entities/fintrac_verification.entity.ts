@@ -1,4 +1,10 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Contact } from './contact.entity';
 
 @Entity()
@@ -6,7 +12,9 @@ export class FintracVerification {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Contact, (contact) => contact.fintrac_verification, { nullable: true })
+  @OneToOne(() => Contact, (contact) => contact.fintrac_verification, {
+    nullable: true,
+  })
   @JoinColumn({ name: 'contact_id' })
   contact: Contact;
 

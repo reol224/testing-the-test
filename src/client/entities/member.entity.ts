@@ -1,4 +1,10 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Contact } from './contact.entity';
 
 @Entity()
@@ -13,8 +19,7 @@ export class Member {
   @ManyToOne(() => Contact, (contact) => contact.members)
   child_contact?: { id: number };
 
-  @Column({ nullable: true})
+  @Column({ nullable: true })
   //@CreateDateColumn()
   created_at?: string;
-
 }

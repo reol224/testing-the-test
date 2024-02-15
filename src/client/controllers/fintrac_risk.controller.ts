@@ -1,12 +1,18 @@
-import { Body, Controller, NotAcceptableException, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  NotAcceptableException,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { FintracRiskService } from '../../services/fintrac_risk.service';
 import { FintracRiskDto } from '../dtos/fintrac_risk.dto';
 import { FintracRisk } from '../entities/fintrac_risk.entity';
 
 @Controller('fintracrisk')
 export class FintracRiskController {
-  constructor(private readonly fintracRiskService: FintracRiskService) {
-  }
+  constructor(private readonly fintracRiskService: FintracRiskService) {}
 
   @Post(':id')
   async add(
@@ -18,7 +24,7 @@ export class FintracRiskController {
     } catch (error) {
       console.error(error);
       throw new NotAcceptableException(
-        'Fintrac couldn\'t be added to the contact',
+        "Fintrac couldn't be added to the contact",
       );
     }
   }

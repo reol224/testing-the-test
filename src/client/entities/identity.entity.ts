@@ -1,4 +1,10 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Contact } from './contact.entity';
 
 @Entity()
@@ -16,40 +22,40 @@ export class Identity {
   @Column()
   first_name: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   last_name?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   address_full?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   address?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   city?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   province?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   country?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   postal_code?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   doc_type?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   doc_number?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   doc_expire?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   doc_province?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   doc_country?: string;
 
   @Column({
@@ -57,7 +63,7 @@ export class Identity {
     enum: ['driverlicense', 'passport', 'other'],
     default: 'other',
   })
-  type: 'driverlicense' |'passport' | 'other';
+  type: 'driverlicense' | 'passport' | 'other';
 
   @Column({
     type: 'enum',

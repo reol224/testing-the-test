@@ -14,7 +14,7 @@ export class IdentityDto {
   doc_expire?: string;
   doc_province?: string;
   doc_country?: string;
-  type: 'driverlicense' |'passport' | 'other';
+  type: 'driverlicense' | 'passport' | 'other';
   status: 'incomplete' | 'complete';
   source?: 'remote' | 'scan' | 'manual';
 }

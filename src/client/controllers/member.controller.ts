@@ -1,4 +1,11 @@
-import { Body, Controller, Delete, NotAcceptableException, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  NotAcceptableException,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { MemberDto } from '../dtos/member.dto';
 import { MemberService } from '../../services/member.service';
 

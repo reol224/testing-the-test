@@ -1,5 +1,5 @@
 export class VerificationDto {
-  contact_id : number;
+  contact_id: number;
   photo_id_req?: boolean;
   photo_id_pass?: boolean;
   selfie_req?: boolean;

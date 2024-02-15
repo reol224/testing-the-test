@@ -1,4 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Contact } from './contact.entity';
 
 @Entity()
@@ -6,7 +12,9 @@ export class VerificationHits {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Contact, (contact) => contact.verification_hits, { nullable: true })
+  @ManyToOne(() => Contact, (contact) => contact.verification_hits, {
+    nullable: true,
+  })
   @JoinColumn({ name: 'contact_id' })
   contact: Contact;
 

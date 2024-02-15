@@ -14,8 +14,9 @@ import {
 import { ContactService } from '../../services/contact.service';
 import { Contact } from '../entities/contact.entity';
 import { ContactDto } from '../dtos/contact.dto';
-import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
+import { TypedException, TypedRoute } from '@nestia/core';
 import { TypeGuardError } from 'typia';
+
 @Controller('contact')
 export class ContactController {
   constructor(private readonly clientService: ContactService) {}
@@ -26,7 +27,7 @@ export class ContactController {
   }
 
   @Get(':id')
-  @TypedException<TypeGuardError>(404, "Contact not found")
+  @TypedException<TypeGuardError>(404, 'Contact not found')
   async findOneById(@Param('id') id: number): Promise<Contact[]> {
     try {
       return await this.clientService.findOneById(id);
@@ -55,8 +56,6 @@ export class ContactController {
     return await this.clientService.create(createGroupDto);
   }
 
-
-
   @Patch(':id')
   async update(
     @Param('id') id: number,
@@ -64,8 +63,6 @@ export class ContactController {
   ): Promise<Contact> {
     return await this.clientService.updateClient(id, updateClientDto);
   }
-
-
 
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {

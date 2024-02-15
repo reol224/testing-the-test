@@ -1,4 +1,10 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Contact } from './contact.entity';
 
 @Entity()
@@ -28,7 +34,7 @@ export class Contract {
   @Column({ nullable: true })
   property_description?: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   commission?: string;
 
   @Column({ nullable: true })

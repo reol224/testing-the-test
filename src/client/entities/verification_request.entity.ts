@@ -1,4 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Contact } from './contact.entity';
 
 @Entity()
@@ -30,5 +36,5 @@ export class VerificationRequest {
   created_at?: Date;
 
   @Column({ nullable: true })
-  expire_at?: Date
+  expire_at?: Date;
 }

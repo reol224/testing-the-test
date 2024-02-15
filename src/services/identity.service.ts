@@ -4,7 +4,6 @@ import { Identity } from '../client/entities/identity.entity';
 import { Repository } from 'typeorm';
 import { Contact } from '../client/entities/contact.entity';
 import { IdentityDto } from '../client/dtos/identity.dto';
-import { Member } from '../client/entities/member.entity';
 
 @Injectable()
 export class IdentityService {
@@ -46,13 +45,18 @@ export class IdentityService {
     });
 
     if (!identityToRemove) {
-      throw new NotFoundException(`Identity with ID ${identityToRemove} not found`);
+      throw new NotFoundException(
+        `Identity with ID ${identityToRemove} not found`,
+      );
     }
 
     await this.identityRepository.remove(identityToRemove);
   }
 
-  async update(identityId: number, identityDto: IdentityDto): Promise<Identity> {
+  async update(
+    identityId: number,
+    identityDto: IdentityDto,
+  ): Promise<Identity> {
     const existingIdentity = await this.identityRepository.findOneBy({
       id: identityId,
     });

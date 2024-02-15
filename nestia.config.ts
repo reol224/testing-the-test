@@ -1,5 +1,5 @@
-import { INestiaConfig } from "@nestia/sdk";
-import { NestFactory } from "@nestjs/core";
+import { INestiaConfig } from '@nestia/sdk';
+import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './src/app.module';
 

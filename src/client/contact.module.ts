@@ -37,11 +37,25 @@ import { FintracRiskService } from '../services/fintrac_risk.service';
       FintracRisk,
       FintracVerification,
       Member,
-      Profile
+      Profile,
     ]),
   ],
-  controllers: [ContactController, MemberController, ContractController, IdentityController, FintracController, FintracRiskController],
-  providers: [ContactService, MemberService, ContractService, IdentityService, FintracService, FintracRiskService],
+  controllers: [
+    ContactController,
+    MemberController,
+    ContractController,
+    IdentityController,
+    FintracController,
+    FintracRiskController,
+  ],
+  providers: [
+    ContactService,
+    MemberService,
+    ContractService,
+    IdentityService,
+    FintracService,
+    FintracRiskService,
+  ],
   exports: [ContactService],
 })
 export class ContactModule {}

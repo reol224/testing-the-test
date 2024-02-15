@@ -10,9 +10,9 @@ export class IdentityController {
   @Post(':id')
   async addIdentity(
     @Param('id') id: number,
-    @Body() createIdentityDto: IdentityDto
+    @Body() createIdentityDto: IdentityDto,
   ): Promise<Identity> {
-    return await this.identityService.create(id,createIdentityDto);
+    return await this.identityService.create(id, createIdentityDto);
   }
   @Patch(':id')
   async updateIdentity(

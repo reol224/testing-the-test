@@ -13,7 +13,6 @@ import { Member } from './client/entities/member.entity';
 import { MemberService } from './services/member.service';
 import { MemberController } from './client/controllers/member.controller';
 
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({

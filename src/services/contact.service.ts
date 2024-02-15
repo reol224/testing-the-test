@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Contact } from '../client/entities/contact.entity';
@@ -48,10 +53,12 @@ export class ContactService {
       return await this.contactRepository.save(contact);
     } else {
       console.log('Invalid type:', contact.type);
-      throw new HttpException('You can only add members to groups/companies', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'You can only add members to groups/companies',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
-
 
   async getClients(): Promise<Contact[]> {
     return await this.contactRepository.find({
@@ -63,7 +70,13 @@ export class ContactService {
         type: true,
         members: true,
       },
-      relations: ['members', 'contract', 'identity', 'fintracs', 'fintrac_risk'],
+      relations: [
+        'members',
+        'contract',
+        'identity',
+        'fintracs',
+        'fintrac_risk',
+      ],
     });
   }
 
@@ -78,7 +91,13 @@ export class ContactService {
           type: true,
         },
         where: { id: id },
-        relations: ['members', 'contract', 'identity', 'fintracs', 'fintrac_risk'],
+        relations: [
+          'members',
+          'contract',
+          'identity',
+          'fintracs',
+          'fintrac_risk',
+        ],
       });
     } catch (error) {
       console.log(error);

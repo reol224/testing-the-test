@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Member } from '../client/entities/member.entity';
@@ -38,7 +43,10 @@ export class MemberService {
     const contact = contacts[0];
 
     if (contact.type !== 'group' && contact.type !== 'company') {
-      throw new HttpException('You can only add members to groups/companies', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'You can only add members to groups/companies',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     if (!contact.members) {

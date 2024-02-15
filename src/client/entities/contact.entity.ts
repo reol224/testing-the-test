@@ -104,35 +104,61 @@ export class Contact {
   @JoinColumn({ name: 'profile_id' })
   profile?: Profile;
 
-  @OneToOne(() => Identity, (identity) => identity.id, { nullable: true, cascade: true })
+  @OneToOne(() => Identity, (identity) => identity.id, {
+    nullable: true,
+    cascade: true,
+  })
   @JoinColumn({ name: 'identity_id' })
   identity?: Identity;
 
-  @OneToMany(() => Verification, (verification) => verification.contact, { nullable: true })
+  @OneToMany(() => Verification, (verification) => verification.contact, {
+    nullable: true,
+  })
   @JoinColumn({ name: 'verifications_id' })
   verifications?: Verification[];
 
-  @OneToMany(() => VerificationRequest, (verificationRequest) => verificationRequest.contact, { nullable: true, cascade: true })
+  @OneToMany(
+    () => VerificationRequest,
+    (verificationRequest) => verificationRequest.contact,
+    { nullable: true, cascade: true },
+  )
   @JoinColumn({ name: 'verification_request_id' })
   verification_request?: VerificationRequest[];
 
-  @OneToMany(() => VerificationHits, (verificationHits) => verificationHits.contact, { nullable: true, cascade: true })
+  @OneToMany(
+    () => VerificationHits,
+    (verificationHits) => verificationHits.contact,
+    { nullable: true, cascade: true },
+  )
   @JoinColumn({ name: 'verification_hits_id' })
   verification_hits?: VerificationHits[];
 
-  @OneToOne(() => Contract, (contract) => contract.id, { nullable: true, cascade: true })
+  @OneToOne(() => Contract, (contract) => contract.id, {
+    nullable: true,
+    cascade: true,
+  })
   @JoinColumn({ name: 'contract_id' })
   contract?: Contract;
 
-  @OneToMany(() => Fintrac, (fintrac) => fintrac.contact, { nullable: true, cascade: true })
+  @OneToMany(() => Fintrac, (fintrac) => fintrac.contact, {
+    nullable: true,
+    cascade: true,
+  })
   @JoinTable({ name: 'fintrac_id' })
   fintracs?: Fintrac[];
 
-  @OneToOne(() => FintracRisk, (fintracRisk) => fintracRisk.contact, { nullable: true, cascade: true })
+  @OneToOne(() => FintracRisk, (fintracRisk) => fintracRisk.contact, {
+    nullable: true,
+    cascade: true,
+  })
   @JoinColumn({ name: 'fintrac_risk_id' })
   fintrac_risk?: FintracRisk;
 
-  @OneToOne(() => FintracVerification, (fintracVerification) => fintracVerification.contact, { nullable: true, cascade: true })
+  @OneToOne(
+    () => FintracVerification,
+    (fintracVerification) => fintracVerification.contact,
+    { nullable: true, cascade: true },
+  )
   @JoinColumn({ name: 'fintrac_verification_id' })
   fintrac_verification?: FintracVerification;
 
