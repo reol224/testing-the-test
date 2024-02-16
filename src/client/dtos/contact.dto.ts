@@ -37,7 +37,7 @@ export class ContactDto {
   verifications?: VerificationDto[];
   verification_request?: VerificationRequestDto[];
   verification_hits?: VerificationHitsDto[];
-  contract?: ContractDto;
+  contracts?: ContractDto[];
   fintracs?: FintracDto[];
   fintrac_risk?: FintracRiskDto;
   fintrac_verification?: FintracVerificationDto;

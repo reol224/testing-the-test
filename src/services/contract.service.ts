@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { ContractDto } from '../client/dtos/contract.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Contract } from '../client/entities/contract.entity';
 import { Repository } from 'typeorm';
 import { Contact } from '../client/entities/contact.entity';
+import { Member } from '../client/entities/member.entity';
 
 @Injectable()
 export class ContractService {
@@ -14,8 +15,8 @@ export class ContractService {
     private readonly contactRepository: Repository<Contact>,
   ) {}
 
-  async add(contactId: number, contractDto: ContractDto): Promise<Contract> {
-    const contact = await this.contactRepository.findOne({
+  async add(contactId: number, contractDtos: ContractDto | ContractDto[]): Promise<Contract[]> {
+    const contacts = await this.contactRepository.find({
       select: {
         id: true,
         name: true,
@@ -24,31 +25,40 @@ export class ContractService {
         type: true,
       },
       where: { id: contactId },
-      relations: ['contract'],
+      relations: ['contracts'],
     });
 
-    if (!contact) {
+    if (!contacts || contacts.length === 0) {
       throw new NotFoundException(`Contact with ID ${contactId} not found`);
     }
 
-    const existingContract = contact.contract;
+    const contact = contacts[0];
 
-    if (existingContract) {
-      throw new NotFoundException(
-        `Contact with ID ${contactId} already has a contract`,
-      );
+    if (!contact.contracts) {
+      contact.contracts = [];
     }
 
-    const newContract = this.contractRepository.create({
-      ...contractDto,
-      contact: {id: contactId},
-    });
+    const contractsDtosArray = Array.isArray(contractDtos)
+      ? contractDtos
+      : [contractDtos];
 
-    contact.contract = newContract;
+    const newContracts: Contract[] = [];
+
+    for (const contractDto of contractsDtosArray) {
+      const newContract = this.contractRepository.create({
+        ...contractDto,
+        contact: {id: contactId},
+      });
+
+      const savedContract = await this.contractRepository.save(newContract);
+      newContracts.push(savedContract);
+    }
+
+    contact.contracts.push(...newContracts);
 
     await this.contactRepository.save(contact);
 
-    return newContract;
+    return newContracts;
   }
 
   async delete(contractId: number): Promise<void> {

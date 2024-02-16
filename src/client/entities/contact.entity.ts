@@ -133,12 +133,12 @@ export class Contact {
   @JoinColumn({ name: 'verification_hits_id' })
   verification_hits?: VerificationHits[];
 
-  @OneToOne(() => Contract, (contract) => contract.id, {
+  @OneToMany(() => Contract, (contract) => contract.contact, {
     nullable: true,
     cascade: true,
   })
   @JoinColumn({ name: 'contract_id' })
-  contract?: Contract;
+  contracts?: Contract[];
 
   @OneToMany(() => Fintrac, (fintrac) => fintrac.contact, {
     nullable: true,

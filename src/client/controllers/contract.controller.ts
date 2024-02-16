@@ -20,7 +20,7 @@ export class ContractController {
   async add(
     @Param('id') id: number,
     @Body() contractDto: ContractDto,
-  ): Promise<Contract> {
+  ): Promise<Contract[]> {
     try {
       return await this.contractService.add(id, contractDto);
     } catch (error) {

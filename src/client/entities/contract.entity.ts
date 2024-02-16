@@ -1,8 +1,7 @@
 import {
   Column,
   Entity,
-  JoinColumn,
-  OneToOne,
+  JoinColumn, ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Contact } from './contact.entity';
@@ -12,7 +11,7 @@ export class Contract {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Contact, (contact) => contact.contract)
+  @ManyToOne(() => Contact, (contact) => contact.contracts)
   @JoinColumn({ name: 'contact_id' })
   contact: Contact;
 

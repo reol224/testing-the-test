@@ -72,7 +72,7 @@ export class ContactService {
       },
       relations: [
         'members',
-        'contract',
+        'contracts',
         'identity',
         'fintracs',
         'fintrac_risk',
@@ -94,7 +94,7 @@ export class ContactService {
         where: { id: id },
         relations: [
           'members',
-          'contract',
+          'contracts',
           'identity',
           'fintracs',
           'fintrac_risk',
