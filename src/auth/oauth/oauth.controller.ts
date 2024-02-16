@@ -1,11 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { OauthService } from './oauth.service';
 
-@Controller('auth')
-export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+@Controller('oauth')
+export class OauthController {
+  constructor(private readonly authService: OauthService) {}
 
-  @Get('/get-auth-token')
+  @Get('/get-oauth-token')
   async getAuthToken(): Promise<any> {
     try {
       return this.authService.getToken();

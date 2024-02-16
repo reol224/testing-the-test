@@ -4,7 +4,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
-export class AuthService {
+export class OauthService {
   private token$: BehaviorSubject<string | null> = new BehaviorSubject<
     string | null
   >(null);
