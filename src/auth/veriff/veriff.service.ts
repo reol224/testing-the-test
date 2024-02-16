@@ -29,7 +29,7 @@ export class VeriffService {
 
     const headers = {
       'Content-Type': 'application/json',
-      'X-AUTH-CLIENT': '5620e6e8-9237-4ee4-98a7-28ff91122a72',
+      'X-AUTH-CLIENT': '',
     };
 
     try {
