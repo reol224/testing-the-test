@@ -147,20 +147,20 @@ export class Contact {
   @JoinTable({ name: 'fintrac_id' })
   fintracs?: Fintrac[];
 
-  @OneToOne(() => FintracRisk, (fintracRisk) => fintracRisk.contact, {
-    nullable: true,
-    cascade: true,
-  })
-  @JoinColumn({ name: 'fintrac_risk_id' })
-  fintrac_risk?: FintracRisk;
-
-  @OneToOne(
-    () => FintracVerification,
-    (fintracVerification) => fintracVerification.contact,
-    { nullable: true, cascade: true },
-  )
-  @JoinColumn({ name: 'fintrac_verification_id' })
-  fintrac_verification?: FintracVerification;
+  // @OneToOne(() => FintracRisk, (fintracRisk) => fintracRisk.contact, {
+  //   nullable: true,
+  //   cascade: true,
+  // })
+  // @JoinColumn({ name: 'fintrac_risk_id' })
+  // fintrac_risk?: FintracRisk;
+  //
+  // @OneToOne(
+  //   () => FintracVerification,
+  //   (fintracVerification) => fintracVerification.contact,
+  //   { nullable: true, cascade: true },
+  // )
+  // @JoinColumn({ name: 'fintrac_verification_id' })
+  // fintrac_verification?: FintracVerification;
 
   @ManyToMany(() => Member, (member) => member.id, {
     nullable: true,

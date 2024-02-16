@@ -6,17 +6,18 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Contact } from './contact.entity';
+import { Fintrac } from './fintrac.entity';
 
 @Entity()
 export class FintracRisk {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Contact, (contact) => contact.fintrac_risk, {
+  @OneToOne(() => Fintrac, (fintrac) => fintrac.fintrac_risk, {
     nullable: true,
   })
-  @JoinColumn({ name: 'contact_id' })
-  contact: Contact;
+  @JoinColumn({ name: 'fintrac_id' })
+  fintrac: Fintrac;
 
   @Column({ nullable: true })
   previously_work?: boolean;

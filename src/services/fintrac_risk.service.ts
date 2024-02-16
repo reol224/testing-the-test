@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Contact } from '../client/entities/contact.entity';
 import { FintracRisk } from '../client/entities/fintrac_risk.entity';
 import { FintracRiskDto } from '../client/dtos/fintrac_risk.dto';
+import { Fintrac } from '../client/entities/fintrac.entity';
 
 @Injectable()
 export class FintracRiskService {
@@ -13,36 +14,32 @@ export class FintracRiskService {
 
     @InjectRepository(Contact)
     private readonly contactRepository: Repository<Contact>,
+
+    @InjectRepository(Fintrac)
+    private readonly fintracRepository: Repository<Fintrac>,
   ) {}
 
   async create(
     contactId: number,
     fintracRiskDto: FintracRiskDto,
   ): Promise<FintracRisk> {
-    const contact = await this.contactRepository.findOne({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        type: true,
-      },
-      where: { id: contactId },
+    const fintrac = await this.fintracRepository.findOne({
+      where: { contact: { id: contactId } },
       relations: ['fintrac_risk'],
     });
 
-    if (!contact) {
-      throw new NotFoundException(`Contact with ID ${contactId} not found`);
+    if (!fintrac) {
+      throw new NotFoundException(`Fintrac for Contact with ID ${contactId} not found`);
     }
 
     const fintracRisk = this.fintracRiskRepository.create({
       ...fintracRiskDto,
-      contact: {id: contactId},
+      fintrac: fintrac,
     });
 
-    contact.fintrac_risk = fintracRisk;
+    fintrac.fintrac_risk = fintracRisk;
 
-    await this.contactRepository.save(contact);
+    await this.fintracRepository.save(fintrac);
 
     return fintracRisk;
   }

@@ -2,10 +2,12 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
+  ManyToOne, OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Contact } from './contact.entity';
+import { FintracRisk } from './fintrac_risk.entity';
+import { FintracVerification } from './fintrac_verification.entity';
 
 @Entity()
 export class Fintrac {
@@ -57,4 +59,19 @@ export class Fintrac {
 
   @Column({ nullable: true })
   pep_description?: string;
+
+  @OneToOne(() => FintracRisk, (fintracRisk) => fintracRisk.fintrac, {
+    nullable: true,
+    cascade: true,
+  })
+  @JoinColumn({ name: 'fintrac_risk_id' })
+  fintrac_risk?: FintracRisk;
+
+  @OneToOne(
+    () => FintracVerification,
+    (fintracVerification) => fintracVerification.fintrac,
+    { nullable: true, cascade: true },
+  )
+  @JoinColumn({ name: 'fintrac_verification_id' })
+  fintrac_verification?: FintracVerification;
 }

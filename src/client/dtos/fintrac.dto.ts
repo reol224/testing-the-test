@@ -1,3 +1,6 @@
+import { FintracRiskDto } from './fintrac_risk.dto';
+import { FintracVerificationDto } from './fintrac_verification.dto';
+
 export class FintracDto {
   contact_id: number;
   purpose?: string;
@@ -14,4 +17,6 @@ export class FintracDto {
   tp_dob?: string;
   pep_flagged?: boolean;
   pep_description?: string;
+  fintrac_risk?: FintracRiskDto;
+  fintrac_verification?: FintracVerificationDto;
 }

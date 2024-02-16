@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Contact } from '../client/entities/contact.entity';
 import { FintracVerification } from '../client/entities/fintrac_verification.entity';
 import { FintracVerificationDto } from '../client/dtos/fintrac_verification.dto';
+import { Fintrac } from '../client/entities/fintrac.entity';
 
 @Injectable()
 export class FintracVerificationService {
@@ -13,36 +14,32 @@ export class FintracVerificationService {
 
     @InjectRepository(Contact)
     private readonly contactRepository: Repository<Contact>,
+
+    @InjectRepository(Fintrac)
+    private readonly fintracRepository: Repository<Fintrac>,
   ) {}
 
   async create(
     contactId: number,
     fintracVerificationDto: FintracVerificationDto,
   ): Promise<FintracVerification> {
-    const contact = await this.contactRepository.findOne({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        type: true,
-      },
-      where: { id: contactId },
+    const fintrac = await this.fintracRepository.findOne({
+      where: { contact: { id: contactId } },
       relations: ['fintrac_verification'],
     });
 
-    if (!contact) {
-      throw new NotFoundException(`Contact with ID ${contactId} not found`);
+    if (!fintrac) {
+      throw new NotFoundException(`Fintrac for Contact with ID ${contactId} not found`);
     }
 
     const fintracVerification = this.fintracVerificationRepository.create({
       ...fintracVerificationDto,
-      contact: {id: contactId},
+      fintrac: fintrac,
     });
 
-    contact.fintrac_verification = fintracVerification;
+    fintrac.fintrac_verification = fintracVerification;
 
-    await this.contactRepository.save(contact);
+    await this.fintracRepository.save(fintrac);
 
     return fintracVerification;
   }

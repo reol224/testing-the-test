@@ -6,17 +6,18 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Contact } from './contact.entity';
+import { Fintrac } from './fintrac.entity';
 
 @Entity()
 export class FintracVerification {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Contact, (contact) => contact.fintrac_verification, {
+  @OneToOne(() => Fintrac, (fintrac) => fintrac.fintrac_verification, {
     nullable: true,
   })
-  @JoinColumn({ name: 'contact_id' })
-  contact: Contact;
+  @JoinColumn({ name: 'fintrac_id' })
+  fintrac: Fintrac;
 
   @Column({
     type: 'enum',
