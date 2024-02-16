@@ -29,7 +29,9 @@ export class FintracVerificationService {
     });
 
     if (!fintrac) {
-      throw new NotFoundException(`Fintrac for Contact with ID ${contactId} not found`);
+      throw new NotFoundException(
+        `Fintrac for Contact with ID ${contactId} not found`,
+      );
     }
 
     const fintracVerification = this.fintracVerificationRepository.create({
@@ -48,9 +50,10 @@ export class FintracVerificationService {
     fintracVerificationId: number,
     fintracVerificationDto: FintracVerificationDto,
   ): Promise<FintracVerification> {
-    const existingFintracVerification = await this.fintracVerificationRepository.findOneBy({
-      id: fintracVerificationId,
-    });
+    const existingFintracVerification =
+      await this.fintracVerificationRepository.findOneBy({
+        id: fintracVerificationId,
+      });
 
     if (!existingFintracVerification) {
       throw new NotFoundException(

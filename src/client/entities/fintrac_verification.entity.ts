@@ -5,7 +5,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Contact } from './contact.entity';
 import { Fintrac } from './fintrac.entity';
 
 @Entity()

@@ -34,7 +34,7 @@ export class IdentityService {
 
     const identity = this.identityRepository.create({
       ...identityDto,
-      contact: {id: contactId},
+      contact: { id: contactId },
     });
 
     contact.identity = identity;

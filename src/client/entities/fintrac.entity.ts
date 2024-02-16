@@ -2,7 +2,8 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne, OneToOne,
+  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Contact } from './contact.entity';

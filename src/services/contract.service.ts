@@ -1,10 +1,9 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ContractDto } from '../client/dtos/contract.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Contract } from '../client/entities/contract.entity';
 import { Repository } from 'typeorm';
 import { Contact } from '../client/entities/contact.entity';
-import { Member } from '../client/entities/member.entity';
 
 @Injectable()
 export class ContractService {
@@ -15,7 +14,10 @@ export class ContractService {
     private readonly contactRepository: Repository<Contact>,
   ) {}
 
-  async add(contactId: number, contractDtos: ContractDto | ContractDto[]): Promise<Contract[]> {
+  async add(
+    contactId: number,
+    contractDtos: ContractDto | ContractDto[],
+  ): Promise<Contract[]> {
     const contacts = await this.contactRepository.find({
       select: {
         id: true,
@@ -47,7 +49,7 @@ export class ContractService {
     for (const contractDto of contractsDtosArray) {
       const newContract = this.contractRepository.create({
         ...contractDto,
-        contact: {id: contactId},
+        contact: { id: contactId },
       });
 
       const savedContract = await this.contractRepository.save(newContract);

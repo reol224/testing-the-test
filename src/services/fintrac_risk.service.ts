@@ -29,7 +29,9 @@ export class FintracRiskService {
     });
 
     if (!fintrac) {
-      throw new NotFoundException(`Fintrac for Contact with ID ${contactId} not found`);
+      throw new NotFoundException(
+        `Fintrac for Contact with ID ${contactId} not found`,
+      );
     }
 
     const fintracRisk = this.fintracRiskRepository.create({

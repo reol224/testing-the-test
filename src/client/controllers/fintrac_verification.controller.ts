@@ -12,7 +12,9 @@ import { FintracVerificationService } from '../../services/fintrac_verification.
 
 @Controller('fintracverification')
 export class FintracVerificationController {
-  constructor(private readonly fintracVerificationService: FintracVerificationService) {}
+  constructor(
+    private readonly fintracVerificationService: FintracVerificationService,
+  ) {}
 
   @Post(':id')
   async add(
@@ -20,7 +22,10 @@ export class FintracVerificationController {
     @Body() fintracVerificationDto: FintracVerificationDto,
   ): Promise<FintracVerification> {
     try {
-      return await this.fintracVerificationService.create(id, fintracVerificationDto);
+      return await this.fintracVerificationService.create(
+        id,
+        fintracVerificationDto,
+      );
     } catch (error) {
       console.error(error);
       throw new NotAcceptableException(
@@ -34,6 +39,9 @@ export class FintracVerificationController {
     @Param('id') id: number,
     @Body() updateFintracVerificationDto: FintracVerificationDto,
   ): Promise<FintracVerification> {
-    return await this.fintracVerificationService.update(id, updateFintracVerificationDto);
+    return await this.fintracVerificationService.update(
+      id,
+      updateFintracVerificationDto,
+    );
   }
 }

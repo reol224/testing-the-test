@@ -49,7 +49,7 @@ import { FintracVerificationService } from '../services/fintrac_verification.ser
     IdentityController,
     FintracController,
     FintracRiskController,
-    FintracVerificationController
+    FintracVerificationController,
   ],
   providers: [
     ContactService,
@@ -58,7 +58,7 @@ import { FintracVerificationService } from '../services/fintrac_verification.ser
     IdentityService,
     FintracService,
     FintracRiskService,
-    FintracVerificationService
+    FintracVerificationService,
   ],
   exports: [ContactService],
 })

@@ -15,8 +15,6 @@ import { Profile } from './profile.entity';
 import { Identity } from './identity.entity';
 import { Verification } from './verification.entity';
 import { VerificationRequest } from './verification_request.entity';
-import { FintracRisk } from './fintrac_risk.entity';
-import { FintracVerification } from './fintrac_verification.entity';
 import { VerificationHits } from './verification_hits.entity';
 import { MemberDto } from '../dtos/member.dto';
 

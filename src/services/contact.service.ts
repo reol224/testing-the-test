@@ -76,7 +76,7 @@ export class ContactService {
         'identity',
         'fintracs',
         'fintracs.fintrac_risk',
-        'fintracs.fintrac_verification'
+        'fintracs.fintrac_verification',
       ],
     });
   }
@@ -98,7 +98,7 @@ export class ContactService {
           'identity',
           'fintracs',
           'fintracs.fintrac_risk',
-          'fintracs.fintrac_verification'
+          'fintracs.fintrac_verification',
         ],
       });
     } catch (error) {
