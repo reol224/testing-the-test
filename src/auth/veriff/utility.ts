@@ -11,7 +11,7 @@ export class Utility {
   }
 
   static readImage(file: string): string {
-    try{
+    try {
       return require('fs').readFileSync(file).toString('base64');
     } catch (error) {
       console.error(error);
