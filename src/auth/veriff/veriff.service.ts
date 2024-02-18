@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { HttpService } from '@nestjs/axios';
+import { SignatureUtility } from './signature_utility';
 
 
 @Injectable()
 export class VeriffService {
+  private readonly secretSharedKey: string;
+
+  constructor(){
+    this.secretSharedKey = process.env.VERIFF_SHARED_SECRET_KEY || '';
+  }
   async initiateVerification(): Promise<any> {
     const url = 'https://stationapi.veriff.com/v1/sessions/';
     const data = {
@@ -29,7 +35,8 @@ export class VeriffService {
 
     const headers = {
       'Content-Type': 'application/json',
-      'X-AUTH-CLIENT': '',
+      'X-AUTH-CLIENT': process.env.VERIFF_API_KEY,
+      'X-HMAC-SIGNATURE': SignatureUtility.generateHmacSignature(data, this.secretSharedKey),
     };
 
     try {
