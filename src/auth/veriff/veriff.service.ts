@@ -143,4 +143,47 @@ Make sure that all the media has been submitted prior to triggering the PATCH re
       throw error;
     }
   }
+
+  async validateRegistry(): Promise<any> {
+    const url = 'https://stationapi.veriff.com/v1/validate-registry';
+
+    const data = {
+      verification: {
+        callback: 'https://veriff.com',
+        person: {
+          idNumber: '001-1505561-1',
+          fullName: 'Nican Xander', // Provide either fullName or firstName + lastName
+          // firstName: 'Nican', // Uncomment if not providing fullName
+          // lastName: 'Xander', // Uncomment if not providing fullName
+          dateOfBirth: '2000-01-01',
+        },
+        address: {
+          fullAddress: 'Lorem Ipsum 30, 13612 Tallinn, Estonia', // Provide either fullAddress or street + houseNumber + postcode
+          // street: 'Lorem Ipsum', // Uncomment if not providing fullAddress
+          // houseNumber: '30', // Uncomment if not providing fullAddress
+          // postcode: '13612', // Uncomment if not providing fullAddress
+        },
+        vendorData: '11111111',
+      },
+    };
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'X-AUTH-CLIENT': process.env.VERIFF_API_KEY,
+      'X-API-KEY': process.env.VERIFF_API_KEY,
+      'X-HMAC-SIGNATURE': Utility.generateHmacSignature(
+        data,
+        this.secretSharedKey,
+      ),
+    };
+
+    try {
+      const response = await axios.post(url, data, { headers });
+      console.log(response.status);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error.response.data);
+      throw error;
+    }
+  }
 }

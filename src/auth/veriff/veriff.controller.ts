@@ -23,6 +23,11 @@ export class VeriffController {
     return this.veriffService.uploadDocument(file);
   }
 
+  @Post('validate')
+  async validateRegistry() {
+    return this.veriffService.validateRegistry();
+  }
+
   @Patch()
   async submit() {
     return this.veriffService.submit();
