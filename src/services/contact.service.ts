@@ -8,57 +8,34 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Contact } from '../client/entities/contact.entity';
 import { ContactDto } from '../client/dtos/contact.dto';
-import { Member } from '../client/entities/member.entity';
 
 @Injectable()
 export class ContactService {
   constructor(
     @InjectRepository(Contact)
     private readonly contactRepository: Repository<Contact>,
-
-    @InjectRepository(Member)
-    private readonly memberRepository: Repository<Member>,
-  ) {}
+  ) {
+  }
 
   async create(createContactDto: ContactDto): Promise<Contact> {
-    const { name, email, phone, members, type, ...data } = createContactDto;
+    try {
+      const { name, email, phone, members, type, ...data } = createContactDto;
 
-    const contact = this.contactRepository.create({
-      ...data,
-      name,
-      email,
-      phone,
-      members: [],
-      type,
-    });
-
-    if (contact.type === 'group' || contact.type === 'company') {
-      if (members && members.length > 0) {
-        const createdMembers = [];
-
-        for (const memberDto of members) {
-          const member = this.memberRepository.create({
-            ...memberDto,
-            created_at: new Date().toDateString(),
-            //parent_contact: contact,
-          });
-
-          const savedMember = await this.memberRepository.save(member);
-          createdMembers.push(savedMember);
-        }
-
-        contact.members = createdMembers;
-      }
+      const contact = this.contactRepository.create({
+        ...data,
+        name,
+        email,
+        phone,
+        members: [],
+        type,
+      });
 
       return await this.contactRepository.save(contact);
-    } else {
-      console.log('Invalid type:', contact.type);
-      throw new HttpException(
-        'You can only add members to groups/companies',
-        HttpStatus.BAD_REQUEST,
-      );
+    } catch (error) {
+      throw new HttpException('Couldn\'t create contact', HttpStatus.BAD_REQUEST);
     }
   }
+
 
   async getClients(): Promise<Contact[]> {
     return await this.contactRepository.find({
