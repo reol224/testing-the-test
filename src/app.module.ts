@@ -12,6 +12,7 @@ import { Contact } from './client/entities/contact.entity';
 import { Member } from './client/entities/member.entity';
 import { MemberService } from './services/member.service';
 import { MemberController } from './client/controllers/member.controller';
+import { WebhookHandlerModule } from './webhook-handler/webhook-handler.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { MemberController } from './client/controllers/member.controller';
     TypeOrmModule.forFeature([Identity, Contact, Member]),
     ContactModule,
     AuthModule,
+    WebhookHandlerModule,
   ],
   controllers: [AppController, ContactController, MemberController],
   providers: [AppService, IdentityService, ContactService, MemberService],
