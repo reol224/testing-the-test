@@ -22,62 +22,64 @@ export class MemberService {
 
   async add(
     contactId: number,
-    memberDtos: MemberDto | MemberDto[],
-  ): Promise<MemberDto[]> {
-    const contacts = await this.contactRepository.find({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        type: true,
-      },
-      where: { id: contactId },
-      relations: ['members'],
-    });
+    memberDtos: MemberDto.Root | MemberDto.Root[],
+  ): Promise<MemberDto.Root[]> {
+    const entity = new MemberDto.Root(memberDtos).getEntity();
 
-    if (!contacts || contacts.length === 0) {
-      throw new NotFoundException(`Contact with ID ${contactId} not found`);
-    }
-
-    const contact = contacts[0];
-
-    if (contact.type !== 'group' && contact.type !== 'company') {
-      throw new HttpException(
-        'You can only add members to groups/companies',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    if (!contact.members) {
-      contact.members = [];
-    }
-
-    const memberDtosArray = Array.isArray(memberDtos)
-      ? memberDtos
-      : [memberDtos];
-
-    const newMembers: Member[] = [];
-
-    for (const memberDto of memberDtosArray) {
-      const newMember = this.memberRepository.create({
-        ...memberDto,
-        parent_contact: contact,
-        created_at: new Date().toDateString(),
-      });
-
-      const savedMember = await this.memberRepository.save(newMember);
-      newMembers.push(savedMember);
-    }
-
-    contact.members.push(...newMembers);
-
-    await this.contactRepository.save(contact);
-
-    return newMembers;
+    // const contacts = await this.contactRepository.find({
+    //   select: {
+    //     id: true,
+    //     name: true,
+    //     email: true,
+    //     phone: true,
+    //     type: true,
+    //   },
+    //   where: { id: contactId },
+    //   relations: ['members'],
+    // });
+    //
+    // if (!contacts || contacts.length === 0) {
+    //   throw new NotFoundException(`Contact with ID ${contactId} not found`);
+    // }
+    //
+    // const contact = contacts[0];
+    //
+    // if (contact.type !== 'group' && contact.type !== 'company') {
+    //   throw new HttpException(
+    //     'You can only add members to groups/companies',
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
+    //
+    // if (!contact.members) {
+    //   contact.members = [];
+    // }
+    //
+    // const memberDtosArray = Array.isArray(memberDtos)
+    //   ? memberDtos
+    //   : [memberDtos];
+    //
+    // const newMembers: Member[] = [];
+    //
+    // for (const memberDto of memberDtosArray) {
+    //   const newMember = this.memberRepository.create({
+    //     ...memberDto,
+    //     parent_contact: contact,
+    //     created_at: new Date().toDateString(),
+    //   });
+    //
+    //   const savedMember = await this.memberRepository.save(newMember);
+    //   newMembers.push(savedMember);
+    // }
+    //
+    // contact.members.push(...newMembers);
+    //
+    // await this.contactRepository.save(contact);
+    //
+    // return newMembers;
   }
 
-  async create(memberDto: MemberDto, contactId: number): Promise<MemberDto> {
+  async create(memberDto: MemberDto.Root, contactId: number): Promise<Member> {
     const contact = { id: contactId };
 
     const newMember = this.memberRepository.create({
@@ -94,7 +96,7 @@ export class MemberService {
     }
   }
 
-  async update(memberId: number, memberDto: MemberDto): Promise<Member> {
+  async update(memberId: number, memberDto: MemberDto.Root): Promise<Member> {
     const existingMember = await this.memberRepository.findOneBy({
       id: memberId,
     });
@@ -105,7 +107,7 @@ export class MemberService {
 
     const updatedMember = this.memberRepository.merge(
       existingMember,
-      memberDto as Member,
+      memberDto as any,
     );
 
     return this.memberRepository.save(updatedMember);

@@ -1,3 +1,4 @@
+import { VerificationRequest } from './verification_request.entity';
 import {
   Column,
   Entity,
@@ -8,29 +9,38 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Verification } from './verification.entity';
+import { Identity } from './identity.entity';
+import { Profile } from './profile.entity';
+import { AbstractEntity } from '../../abstract/abstract.entity';
+import { VerificationHits } from './verification_hits.entity';
 import { Contract } from './contract.entity';
 import { Fintrac } from './fintrac.entity';
-import { Member } from './member.entity';
-import { Profile } from './profile.entity';
-import { Identity } from './identity.entity';
-import { Verification } from './verification.entity';
-import { VerificationRequest } from './verification_request.entity';
-import { VerificationHits } from './verification_hits.entity';
-import { MemberDto } from '../dtos/member.dto';
+
+export enum ContactTypeEnum {
+  individual = 1,
+  group = 2,
+  company = 3,
+}
+
+export enum ContactStatusEnum {
+  archived = 0,
+  active = 1,
+}
 
 @Entity()
-export class Contact {
+export class Contact extends AbstractEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column()
   name: string;
 
   @Column({ unique: true, nullable: true })
-  email: string;
+  email?: string;
 
   @Column({ type: 'varchar', nullable: true })
-  phone: string;
+  phone?: string;
 
   @Column({ nullable: true })
   address?: string;
@@ -42,7 +52,7 @@ export class Contact {
   province?: string;
 
   @Column({ nullable: true })
-  postal?: string;
+  postal_code?: string;
 
   @Column({ nullable: true })
   country?: string;
@@ -62,20 +72,22 @@ export class Contact {
   @Column({ nullable: true })
   corp_country?: string;
 
-  @Column({
-    type: 'enum',
-    enum: ['individual', 'company', 'group'],
-    nullable: true,
-    default: 'individual',
-  })
-  type: 'individual' | 'company' | 'group';
+  @Column({ nullable: true })
+  principal_business?: string;
 
   @Column({
     type: 'enum',
-    enum: ['active', 'archived'],
-    default: 'active',
+    enum: ContactTypeEnum,
+    default: ContactTypeEnum.individual,
   })
-  status: 'active' | 'archived';
+  type?: ContactTypeEnum;
+
+  @Column({
+    type: 'enum',
+    enum: ContactStatusEnum,
+    default: ContactStatusEnum.active,
+  })
+  status?: ContactStatusEnum;
 
   @Column({ nullable: true })
   avatar_sm?: string;
@@ -145,25 +157,20 @@ export class Contact {
   @JoinTable({ name: 'fintrac_id' })
   fintracs?: Fintrac[];
 
-  // @OneToOne(() => FintracRisk, (fintracRisk) => fintracRisk.contact, {
-  //   nullable: true,
-  //   cascade: true,
-  // })
-  // @JoinColumn({ name: 'fintrac_risk_id' })
-  // fintrac_risk?: FintracRisk;
-  //
-  // @OneToOne(
-  //   () => FintracVerification,
-  //   (fintracVerification) => fintracVerification.contact,
-  //   { nullable: true, cascade: true },
-  // )
-  // @JoinColumn({ name: 'fintrac_verification_id' })
-  // fintrac_verification?: FintracVerification;
+  @ManyToMany(() => Contact, (contact) => contact.members)
+  groups?: Contact;
 
-  @ManyToMany(() => Member, (member) => member.id, {
-    nullable: true,
-    cascade: true,
+  @ManyToMany(() => Contact, (contact) => contact.groups, { cascade: true })
+  @JoinTable({
+    name: 'contact_group_members',
+    joinColumn: {
+      name: 'contact_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'group_id',
+      referencedColumnName: 'id',
+    },
   })
-  @JoinTable()
-  members: MemberDto[];
+  members?: Contact[];
 }

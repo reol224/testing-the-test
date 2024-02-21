@@ -15,55 +15,15 @@ export class FintracService {
     private readonly contactRepository: Repository<Contact>,
   ) {}
 
-  async add(
+  async create(
     contactId: number,
-    fintracDtos: FintracDto | FintracDto[],
-  ): Promise<Fintrac[]> {
-    const contacts = await this.contactRepository.find({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        type: true,
-      },
-      where: { id: contactId },
-      relations: ['fintracs'],
-    });
-
-    if (!contacts || contacts.length === 0) {
-      throw new NotFoundException(`Contact with ID ${contactId} not found`);
-    }
-
-    const contact = contacts[0];
-
-    if (!contact.fintracs) {
-      contact.fintracs = [];
-    }
-
-    const fintracDtosArray = Array.isArray(fintracDtos)
-      ? fintracDtos
-      : [fintracDtos];
-
-    const newFintracs: Fintrac[] = [];
-
-    for (const fintracDto of fintracDtosArray) {
-      const newFintrac = this.fintracRepository.create({
-        ...fintracDto,
-        contact: contact,
-      });
-
-      const savedFintrac = await this.fintracRepository.save(newFintrac);
-      newFintracs.push(savedFintrac);
-    }
-
-    contact.fintracs.push(...newFintracs);
-
-    await this.contactRepository.save(contact);
-
-    return newFintracs;
+    fintracDtos: FintracDto.Root,
+  ): Promise<Fintrac> {
+    const entity = new FintracDto.Root(fintracDtos).getEntity();
+    return this.fintracRepository.save(entity);
   }
-  async update(fintracId: number, fintracDto: FintracDto): Promise<Fintrac> {
+
+  async update(fintracId: number, request: FintracDto.UpdateRequest): Promise<Fintrac> {
     const existingFintrac = await this.fintracRepository.findOneBy({
       id: fintracId,
     });
@@ -74,7 +34,7 @@ export class FintracService {
 
     const updatedFintrac = this.fintracRepository.merge(
       existingFintrac,
-      fintracDto,
+      request as any,
     );
 
     return this.fintracRepository.save(updatedFintrac);

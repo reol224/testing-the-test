@@ -17,10 +17,10 @@ export class FintracController {
   @Post(':id')
   async add(
     @Param('id') id: number,
-    @Body() fintracDto: FintracDto[],
-  ): Promise<Fintrac[]> {
+    @Body() fintracDto: FintracDto.Root,
+  ): Promise<Fintrac> {
     try {
-      return await this.fintracService.add(id, fintracDto);
+      return await this.fintracService.create(id, fintracDto);
     } catch (error) {
       console.error(error);
       throw new NotAcceptableException(
@@ -32,7 +32,7 @@ export class FintracController {
   @Patch(':id')
   async update(
     @Param('id') id: number,
-    @Body() updateFintracDto: FintracDto,
+    @Body() updateFintracDto: FintracDto.Root,
   ): Promise<Fintrac> {
     return await this.fintracService.update(id, updateFintracDto);
   }

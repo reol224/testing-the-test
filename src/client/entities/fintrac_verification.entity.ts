@@ -6,7 +6,13 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Fintrac } from './fintrac.entity';
+import { ContactTypeEnum } from './contact.entity';
 
+export enum FintracVerificationTypeEnum {
+  doc = 1,
+  credit = 2,
+  other = 3
+}
 @Entity()
 export class FintracVerification {
   @PrimaryGeneratedColumn()
@@ -20,10 +26,10 @@ export class FintracVerification {
 
   @Column({
     type: 'enum',
-    enum: ['doc', 'credit', 'other'],
-    nullable: true,
+    enum: FintracVerificationTypeEnum,
+    default: FintracVerificationTypeEnum.other,
   })
-  type?: 'doc' | 'credit' | 'other';
+  type?: FintracVerificationTypeEnum;
 
   @Column({ nullable: true })
   credit_bureau?: string;

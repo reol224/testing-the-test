@@ -6,7 +6,6 @@ import { ContactService } from '../services/contact.service';
 import { Contract } from './entities/contract.entity';
 import { Fintrac } from './entities/fintrac.entity';
 import { Member } from './entities/member.entity';
-import { MemberController } from './controllers/member.controller';
 import { MemberService } from '../services/member.service';
 import { FintracRisk } from './entities/fintrac_risk.entity';
 import { FintracVerification } from './entities/fintrac_verification.entity';
@@ -18,7 +17,6 @@ import { ContractController } from './controllers/contract.controller';
 import { ContractService } from '../services/contract.service';
 import { IdentityService } from '../services/identity.service';
 import { Identity } from './entities/identity.entity';
-import { IdentityController } from './controllers/identity.controller';
 import { FintracController } from './controllers/fintrac.controller';
 import { FintracService } from '../services/fintrac.service';
 import { FintracRiskController } from './controllers/fintrac_risk.controller';
@@ -44,9 +42,7 @@ import { FintracVerificationService } from '../services/fintrac_verification.ser
   ],
   controllers: [
     ContactController,
-    MemberController,
     ContractController,
-    IdentityController,
     FintracController,
     FintracRiskController,
     FintracVerificationController,

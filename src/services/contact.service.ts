@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Contact } from '../client/entities/contact.entity';
+import { Contact, ContactTypeEnum } from '../client/entities/contact.entity';
 import { ContactDto } from '../client/dtos/contact.dto';
 
 @Injectable()
@@ -17,23 +17,44 @@ export class ContactService {
   ) {
   }
 
-  async create(createContactDto: ContactDto): Promise<Contact> {
-    try {
-      const { name, email, phone, members, type, ...data } = createContactDto;
+  async create(
+    type: ContactTypeEnum,
+    request: ContactDto.UpdateRequest,
+  ): Promise<Contact> {
+    const entity = new ContactDto.Root(request).getEntity();
+    entity.type = type;
 
-      const contact = this.contactRepository.create({
-        ...data,
-        name,
-        email,
-        phone,
-        members: [],
-        type,
-      });
+    if (type == ContactTypeEnum.company || type == ContactTypeEnum.group) {
+      const members = request.members ?? [];
+      const groupMembers: Contact[] = [];
+      if (members && members.length > 0) {
+        for (const memberDto of members) {
+          console.log(memberDto);
+          let member;
 
-      return await this.contactRepository.save(contact);
-    } catch (error) {
-      throw new HttpException('Couldn\'t create contact', HttpStatus.BAD_REQUEST);
+          if (memberDto.key) {
+            member = this.contactRepository.create({
+              id: parseInt(memberDto.key),
+            });
+          } else {
+            member = this.contactRepository.create({
+              name: memberDto.name,
+              email: memberDto.email ?? '',
+              phone: memberDto.phone ?? '',
+            } satisfies Contact);
+          }
+
+          groupMembers.push(member);
+        }
+      }
+
+      console.log(groupMembers);
+      entity.members = groupMembers;
+      console.log(entity);
+
     }
+
+    return this.contactRepository.save(entity);
   }
 
 
@@ -100,10 +121,7 @@ export class ContactService {
     }
   }
 
-  async updateClient(
-    id: number,
-    updateClientDto: ContactDto,
-  ): Promise<Contact> {
+  async updateClient(id: number, request: ContactDto.UpdateRequest): Promise<Contact> {
     const existingClient = await this.contactRepository.findOneBy({ id: id });
 
     if (!existingClient) {
@@ -112,7 +130,7 @@ export class ContactService {
 
     const updatedClient = this.contactRepository.merge(
       existingClient,
-      updateClientDto as Contact,
+      request as any,
     );
 
     return this.contactRepository.save(updatedClient);

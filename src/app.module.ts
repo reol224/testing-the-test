@@ -11,7 +11,6 @@ import { Identity } from './client/entities/identity.entity';
 import { Contact } from './client/entities/contact.entity';
 import { Member } from './client/entities/member.entity';
 import { MemberService } from './services/member.service';
-import { MemberController } from './client/controllers/member.controller';
 import { WebhookHandlerModule } from './webhook-handler/webhook-handler.module';
 
 @Module({
@@ -32,7 +31,7 @@ import { WebhookHandlerModule } from './webhook-handler/webhook-handler.module';
     AuthModule,
     WebhookHandlerModule,
   ],
-  controllers: [AppController, ContactController, MemberController],
+  controllers: [AppController, ContactController],
   providers: [AppService, IdentityService, ContactService, MemberService],
 })
 export class AppModule {}

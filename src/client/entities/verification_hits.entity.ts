@@ -19,14 +19,14 @@ export class VerificationHits {
   contact: Contact;
 
   @Column({ nullable: true })
-  verification_request_id: number;
+  verification_request_id?: number;
 
   @Column({
     type: 'enum',
     enum: ['match', 'warning', 'sanction', 'fitness', 'pep', 'adverse'],
     nullable: true,
   })
-  type: 'match' | 'warning' | 'sanction' | 'fitness' | 'pep' | 'adverse';
+  type?: 'match' | 'warning' | 'sanction' | 'fitness' | 'pep' | 'adverse';
 
   @Column({ nullable: true })
   label?: string;

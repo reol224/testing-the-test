@@ -9,9 +9,9 @@ import {
 import { Contact } from './contact.entity';
 import { FintracRisk } from './fintrac_risk.entity';
 import { FintracVerification } from './fintrac_verification.entity';
-
+import { AbstractEntity } from '../../abstract/abstract.entity';
 @Entity()
-export class Fintrac {
+export class Fintrac extends AbstractEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
